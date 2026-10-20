@@ -936,3 +936,3179 @@ h1,h2,h3,b,strong,.brand{font-family:"Space Grotesk","DM Sans",sans-serif}.grid-
   .kpi-grid { grid-template-columns: 1fr; }
   .page { padding: 16px; }
 }
+
+/* =========================================================
+   SCENARIO SIMULATION - NESTED KPI FIX
+   ========================================================= */
+
+.content-grid > .panel:nth-child(2) .kpi-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.content-grid > .panel:nth-child(2) .kpi-card {
+  min-width: 0;
+  padding: 14px;
+}
+
+.content-grid > .panel:nth-child(2) .kpi-card strong {
+  font-size: 20px;
+  overflow-wrap: anywhere;
+}
+
+.content-grid > .panel:nth-child(2) .kpi-card span {
+  font-size: 8px;
+}
+
+@media (max-width: 560px) {
+  .content-grid > .panel:nth-child(2) .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Command Center decision pipeline */
+@media (max-width: 1000px) {
+  .dashboard-inner
+    > .panel
+    > div[style*="repeat(5"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .dashboard-inner
+    > .panel
+    > div[style*="repeat(5"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* =====================================================
+   PROFILE DROPDOWN
+===================================================== */
+
+.profile-wrapper {
+  position: relative;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.profile-card > svg {
+  color: var(--muted);
+  transition: transform 0.2s ease;
+}
+
+.profile-chevron-open {
+  transform: rotate(180deg);
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 290px;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  z-index: 1000;
+  animation: profileDropdownIn 0.16s ease-out;
+}
+
+@keyframes profileDropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px;
+}
+
+.profile-dropdown-avatar {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--accent);
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.profile-dropdown-header > div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-dropdown-header strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.profile-dropdown-header span {
+  color: var(--muted);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-dropdown-header small {
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.profile-dropdown-divider {
+  height: 1px;
+  margin: 6px 2px;
+  background: var(--line);
+}
+
+.profile-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.profile-menu-item:hover {
+  background: var(--surface2);
+}
+
+.profile-menu-item > svg {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.profile-menu-item span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-menu-item b {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.profile-menu-item small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.profile-menu-item.logout-item {
+  color: #ef4444;
+}
+
+.profile-menu-item.logout-item > svg {
+  color: #ef4444;
+}
+
+@media (max-width: 640px) {
+  .profile-dropdown {
+    position: fixed;
+    top: 70px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+  }
+
+  .profile-copy {
+    display: none;
+  }
+
+  .profile-card {
+    padding: 0;
+  }
+}
+/* =====================================================
+   LOGIFORGE FINAL PROFILE UI
+   ===================================================== */
+
+.profile-wrapper {
+  position: relative;
+}
+
+.topbar .profile-card {
+  width: auto;
+  min-width: 190px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 4px 9px 4px 5px;
+
+  border: 1px solid var(--line);
+  border-radius: 13px;
+
+  background: var(--surface);
+  color: var(--text);
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.topbar .profile-card:hover {
+  border-color: rgba(34, 211, 238, 0.35);
+  background: var(--surface);
+}
+
+.topbar .profile-card .avatar {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 11px;
+
+  background: linear-gradient(
+    145deg,
+    #111827,
+    #1e293b
+  );
+
+  color: white;
+
+  font: 700 10px "Space Grotesk";
+}
+
+.topbar .profile-copy {
+  min-width: 105px;
+  flex: 1;
+}
+
+.topbar .profile-copy b {
+  display: block;
+
+  color: var(--text);
+
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+.topbar .profile-copy small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: var(--muted);
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
+
+.profile-chevron-open {
+  transform: rotate(180deg);
+  color: var(--accent) !important;
+}
+
+
+/* DROPDOWN */
+
+.topbar .profile-dropdown {
+  position: absolute;
+
+  top: calc(100% + 8px);
+  right: 0;
+
+  width: 270px;
+
+  padding: 6px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--line);
+  border-radius: 13px;
+
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.14);
+
+  z-index: 9999;
+
+  animation: profileMenuIn 0.15s ease-out;
+}
+
+@keyframes profileMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* HEADER */
+
+.profile-dropdown-header {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 9px;
+}
+
+.profile-dropdown-avatar {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #22d3ee,
+    #14b8a6
+  );
+
+  color: #041018;
+
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.profile-dropdown-header > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.profile-dropdown-header strong {
+  color: var(--text);
+
+  font-size: 12px;
+}
+
+.profile-dropdown-header span {
+  max-width: 185px;
+
+  overflow: hidden;
+
+  color: var(--muted);
+
+  font-size: 9px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.profile-dropdown-header small {
+  color: var(--accent);
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
+
+
+/* DIVIDER */
+
+.profile-dropdown-divider {
+  height: 1px;
+
+  margin: 4px 3px;
+
+  background: var(--line);
+}
+
+
+/* MENU */
+
+.profile-menu-item {
+  width: 100%;
+  min-height: 39px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 6px 8px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: var(--text);
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.profile-menu-item:hover {
+  background: var(--surface2);
+  transform: translateX(1px);
+}
+
+.profile-menu-item > svg {
+  width: 15px;
+  height: 15px;
+
+  flex-shrink: 0;
+
+  color: var(--muted);
+}
+
+.profile-menu-item:hover > svg {
+  color: var(--accent);
+}
+
+.profile-menu-item span {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.profile-menu-item b {
+  color: var(--text);
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.profile-menu-item small {
+  color: var(--muted);
+
+  font-size: 8px;
+}
+
+
+/* LOGOUT */
+
+.profile-menu-item.logout-item {
+  color: #ef4444;
+}
+
+.profile-menu-item.logout-item > svg {
+  color: #ef4444;
+}
+
+.profile-menu-item.logout-item:hover {
+  background: rgba(239, 68, 68, 0.07);
+}
+
+.profile-menu-item.logout-item b {
+  color: #ef4444;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+  .topbar .profile-card {
+    min-width: 44px;
+    width: 44px;
+    height: 44px;
+
+    padding: 2px;
+
+    justify-content: center;
+  }
+
+  .topbar .profile-copy,
+  .topbar .profile-card > svg {
+    display: none;
+  }
+
+  .topbar .profile-card .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .topbar .profile-dropdown {
+    position: fixed;
+
+    top: 66px;
+    right: 10px;
+
+    width: 270px;
+    max-width: calc(100vw - 20px);
+  }
+}
+
+/* =========================================================
+   LOGIFORGE AI — CODEVITA INSPIRED LOGIN
+   ========================================================= */
+
+.login-page {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(99, 60, 190, 0.32),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      #292645 0%,
+      #302c63 43%,
+      #0d0b20 100%
+    );
+
+  padding: 40px 20px;
+}
+
+
+/* =========================================================
+   BACKGROUND DECORATION
+   ========================================================= */
+
+.login-decoration {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.login-square {
+  position: absolute;
+  display: block;
+
+  width: 24px;
+  height: 24px;
+
+  border-radius: 6px;
+
+  background: rgba(255, 255, 255, 0.11);
+
+  transform: rotate(8deg);
+
+  box-shadow:
+    inset 0 0 20px rgba(255, 255, 255, 0.03);
+}
+
+.square-1 {
+  top: 18%;
+  left: 10%;
+  width: 24px;
+  height: 24px;
+}
+
+.square-2 {
+  top: 17%;
+  right: 28%;
+  width: 25px;
+  height: 25px;
+}
+
+.square-3 {
+  top: 35%;
+  left: 25%;
+  width: 96px;
+  height: 96px;
+  border-radius: 18px;
+  opacity: 0.7;
+  transform: rotate(3deg);
+}
+
+.square-4 {
+  top: 33%;
+  right: 8%;
+  width: 78px;
+  height: 78px;
+  border-radius: 18px;
+  opacity: 0.55;
+  transform: rotate(19deg);
+}
+
+.square-5 {
+  bottom: 9%;
+  left: 6%;
+  width: 30px;
+  height: 30px;
+  transform: rotate(-20deg);
+}
+
+.square-6 {
+  bottom: 15%;
+  left: 15%;
+  width: 120px;
+  height: 120px;
+  border-radius: 18px;
+  opacity: 0.5;
+  transform: rotate(8deg);
+}
+
+.square-7 {
+  bottom: 12%;
+  right: 17%;
+  width: 130px;
+  height: 130px;
+  border-radius: 18px;
+  opacity: 0.48;
+  transform: rotate(-7deg);
+}
+
+.square-8 {
+  bottom: 18%;
+  right: 8%;
+  width: 28px;
+  height: 28px;
+  transform: rotate(-22deg);
+}
+
+
+/* =========================================================
+   THEME BUTTON
+   ========================================================= */
+
+.login-top-controls {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  z-index: 10;
+}
+
+.login-theme-btn {
+  width: 38px;
+  height: 38px;
+
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 10px;
+
+  background: rgba(255,255,255,.08);
+  color: #fff;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(10px);
+
+  transition: .2s ease;
+}
+
+.login-theme-btn:hover {
+  background: rgba(255,255,255,.15);
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+
+.login-card {
+  position: relative;
+  z-index: 5;
+
+  width: min(100%, 510px);
+
+  background: #fff;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 35px 90px rgba(0,0,0,.40),
+    0 12px 30px rgba(0,0,0,.18);
+
+  animation: loginCardIn .45s ease-out;
+}
+
+@keyframes loginCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =========================================================
+   PURPLE HEADER
+   ========================================================= */
+
+.login-card-top {
+  position: relative;
+
+  min-height: 172px;
+
+  padding: 38px 44px 58px;
+
+  color: #fff;
+
+  background:
+    radial-gradient(
+      circle at 80% 15%,
+      rgba(255,255,255,.08),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #431394,
+      #351080
+    );
+}
+
+
+/* =========================================================
+   LOGIFORGE BRAND
+   ========================================================= */
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.login-brand-mark {
+  width: 47px;
+  height: 47px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 13px;
+
+  background: rgba(255,255,255,.14);
+
+  border: 1px solid rgba(255,255,255,.20);
+
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .05em;
+
+  box-shadow:
+    inset 0 0 15px rgba(255,255,255,.05);
+}
+
+.login-brand-name {
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: 1;
+}
+
+.login-brand-name span {
+  color: #b9fff5;
+}
+
+.login-brand-subtitle {
+  margin-top: 6px;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: .20em;
+
+  color: rgba(255,255,255,.65);
+}
+
+.login-header-badge {
+  position: absolute;
+
+  right: 38px;
+  top: 38px;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  padding: 7px 9px;
+
+  border-radius: 8px;
+
+  background: rgba(255,255,255,.09);
+
+  border: 1px solid rgba(255,255,255,.12);
+
+  color: rgba(255,255,255,.75);
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: .10em;
+}
+
+
+/* =========================================================
+   CURVED WAVE
+   ========================================================= */
+
+.login-wave {
+  position: absolute;
+
+  z-index: 2;
+
+  top: 116px;
+  left: -8%;
+
+  width: 116%;
+  height: 85px;
+
+  background: #fff;
+
+  border-radius: 50% 50% 0 0 / 70% 70% 0 0;
+
+  transform: rotate(-1deg);
+}
+
+
+/* =========================================================
+   CARD BODY
+   ========================================================= */
+
+.login-card-body {
+  position: relative;
+  z-index: 3;
+
+  padding: 0 48px 28px;
+}
+
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.login-heading {
+  text-align: center;
+
+  margin-bottom: 22px;
+}
+
+.login-heading h1 {
+  margin: 0;
+
+  color: #4b5563;
+
+  font-size: 26px;
+  font-weight: 700;
+
+  letter-spacing: -.03em;
+}
+
+.login-heading p {
+  margin: 7px 0 0;
+
+  color: #8a94a3;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   LOGIN MODE
+   ========================================================= */
+
+.login-mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 4px;
+
+  padding: 4px;
+
+  margin-bottom: 19px;
+
+  border-radius: 10px;
+
+  background: #f1f3f7;
+}
+
+.login-mode-switch button {
+  border: 0;
+
+  padding: 9px 10px;
+
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: #7b8493;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: .2s ease;
+}
+
+.login-mode-switch button.active {
+  background: #fff;
+
+  color: #431394;
+
+  box-shadow:
+    0 2px 7px rgba(0,0,0,.08);
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.login-field label {
+  color: #4b5563;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.login-input-wrap {
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 13px;
+
+  border-bottom: 1px solid #aeb4bd;
+
+  background: #fff;
+
+  transition: .2s ease;
+}
+
+.login-input-wrap svg {
+  flex-shrink: 0;
+
+  color: #7c8490;
+}
+
+.login-input-wrap:focus-within {
+  border-bottom-color: #431394;
+
+  box-shadow:
+    0 2px 0 #431394;
+}
+
+.login-input-wrap:focus-within svg {
+  color: #431394;
+}
+
+.login-input-wrap input {
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #202633;
+
+  font-size: 13px;
+}
+
+.login-input-wrap input::placeholder {
+  color: #a2a9b3;
+}
+
+.otp-input-wrap input {
+  letter-spacing: .25em;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   OTP HELP
+   ========================================================= */
+
+.otp-help {
+  margin-top: -2px;
+
+  color: #929aa6;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+.login-message {
+  padding: 10px 12px;
+
+  border-radius: 8px;
+
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.login-message.error {
+  color: #b42318;
+
+  background: #fff1f0;
+
+  border: 1px solid #ffd2ce;
+}
+
+.login-message.success {
+  color: #087443;
+
+  background: #effcf6;
+
+  border: 1px solid #b7efd2;
+}
+
+
+/* =========================================================
+   SIGN IN BUTTON
+   ========================================================= */
+
+.login-submit {
+  width: 100%;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-top: 2px;
+
+  border: 0;
+  border-radius: 5px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #42128f,
+      #5017a8
+    );
+
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 7px 18px rgba(67,19,148,.20);
+
+  transition: .2s ease;
+}
+
+.login-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 10px 22px rgba(67,19,148,.28);
+}
+
+.login-submit:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   RESEND OTP
+   ========================================================= */
+
+.resend-otp {
+  display: block;
+
+  margin: 14px auto 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #7c8490;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.resend-otp strong {
+  color: #431394;
+}
+
+.resend-otp:hover strong {
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   SECURITY
+   ========================================================= */
+
+.login-security {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 22px;
+  padding: 12px;
+
+  border-radius: 9px;
+
+  background: #f7f8fa;
+}
+
+.login-security > svg {
+  flex-shrink: 0;
+
+  color: #431394;
+}
+
+.login-security div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.login-security strong {
+  color: #515b68;
+
+  font-size: 9px;
+}
+
+.login-security span {
+  color: #8c95a2;
+
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.login-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 22px;
+  padding-top: 17px;
+
+  border-top: 1px solid #eceef2;
+
+  color: #a0a7b1;
+
+  font-size: 7px;
+  font-weight: 700;
+
+  letter-spacing: .07em;
+}
+
+
+/* =========================================================
+   PAGE BOTTOM TEXT
+   ========================================================= */
+
+.login-bottom {
+  position: absolute;
+
+  bottom: 15px;
+  left: 0;
+  right: 0;
+
+  z-index: 3;
+
+  text-align: center;
+
+  color: rgba(255,255,255,.35);
+
+  font-size: 8px;
+
+  letter-spacing: .08em;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  .login-page {
+    padding: 25px 15px;
+  }
+
+  .login-card {
+    width: 100%;
+
+    border-radius: 19px;
+  }
+
+  .login-card-top {
+    min-height: 155px;
+
+    padding: 30px 25px 50px;
+  }
+
+  .login-brand-name {
+    font-size: 21px;
+  }
+
+  .login-header-badge {
+    display: none;
+  }
+
+  .login-wave {
+    top: 105px;
+    height: 70px;
+  }
+
+  .login-card-body {
+    padding: 0 25px 23px;
+  }
+
+  .login-heading h1 {
+    font-size: 23px;
+  }
+
+  .login-bottom {
+    display: none;
+  }
+
+  .square-3,
+  .square-6,
+  .square-7 {
+    opacity: .25;
+  }
+}
+
+
+@media (max-width: 420px) {
+
+  .login-page {
+    padding: 15px;
+  }
+
+  .login-card-body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .login-card-top {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .login-brand-mark {
+    width: 42px;
+    height: 42px;
+  }
+
+  .login-brand-name {
+    font-size: 19px;
+  }
+
+  .login-heading p {
+    font-size: 10px;
+  }
+}
+/* ============================================================
+   LOGIFORGE — EXACT REFERENCE TOPBAR OVERRIDE
+   This block intentionally mirrors Pasted text(5).txt.
+   ============================================================ */
+:root{
+  --lf-bg:#eef3f2; --lf-bar:#f7f9f8; --lf-surface:#ffffff; --lf-soft:#eaf1f0;
+  --lf-text:#13262c; --lf-head:#0a2a33; --lf-muted:#5b6f75; --lf-line:#d5dfe0;
+  --lf-teal:#0f6b78; --lf-teal-hi:#14899a; --lf-mint:#5eead4; --lf-danger:#c2410c;
+  --lf-shadow:0 24px 50px -18px rgba(10,42,51,.35);
+  --lf-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --lf-body:'Figtree','Segoe UI',system-ui,sans-serif;
+}
+html.dark{
+  --lf-bg:#06141a; --lf-bar:#0a1d26; --lf-surface:#0d2530; --lf-soft:#12303c;
+  --lf-text:#e3eeed; --lf-head:#f2fbfa; --lf-muted:#8fa6ab; --lf-line:#1c3a45;
+  --lf-teal:#14899a; --lf-teal-hi:#5eead4; --lf-danger:#fb923c;
+  --lf-shadow:0 24px 50px -18px rgba(0,0,0,.7);
+}
+.topbar{
+  position:sticky; top:0; z-index:50; height:76px; display:flex; align-items:center;
+  justify-content:space-between; gap:16px; padding:0 28px;
+  background:var(--lf-bar); border-bottom:1px solid var(--lf-line);
+  transition:background .25s,border-color .25s;
+  font-family:var(--lf-body);
+}
+.topbar .title{min-width:0;display:block}
+.topbar .title small{display:block;font-size:13px;font-weight:500;color:var(--lf-muted)}
+.topbar .title h1{margin-top:2px;font:600 21px/1.15 var(--lf-display);letter-spacing:-.025em;color:var(--lf-head);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .actions{display:flex;align-items:center;gap:10px}
+.topbar .divider{width:1px;height:34px;background:var(--lf-line);margin:0 4px}
+.topbar .chip{
+  position:relative;display:flex;align-items:center;gap:10px;height:50px;padding:5px 12px 5px 6px;
+  border:1px solid var(--lf-line);border-radius:14px;background:var(--lf-surface);
+  color:var(--lf-text);text-align:left;transition:border-color .15s,background .15s,transform .1s;
+  box-shadow:none;
+}
+.topbar .chip:hover{border-color:var(--lf-teal-hi)}
+.topbar .chip:active{transform:scale(.985)}
+.topbar .chip .ico{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--lf-soft);color:var(--lf-teal-hi);flex:none}
+.topbar .chip b{display:block;font:600 14px/1.1 var(--lf-display);color:var(--lf-head)}
+.topbar .chip span.sub{display:block;margin-top:3px;font-size:12px;color:var(--lf-muted);font-weight:400;letter-spacing:normal}
+.topbar .chip .i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.topbar .bell{width:50px;padding:0;justify-content:center;color:var(--lf-muted)}
+.topbar .bell:hover{color:var(--lf-teal-hi)}
+.topbar .bell .dot{position:absolute;top:11px;right:12px;width:9px;height:9px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 2px var(--lf-surface)}
+.topbar .bell.read .dot{display:none}
+.topbar .bell.ring svg{animation:lfRing .7s ease}
+@keyframes lfRing{0%,100%{transform:rotate(0)}20%{transform:rotate(14deg)}40%{transform:rotate(-12deg)}60%{transform:rotate(8deg)}80%{transform:rotate(-4deg)}}
+.topbar .switch{width:44px;height:26px;border-radius:999px;background:var(--lf-soft);border:1px solid var(--lf-line);position:relative;margin-left:4px;flex:none;transition:background .2s}
+.topbar .switch::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--lf-teal-hi);transition:transform .2s}
+html.dark .topbar .switch::after{transform:translateX(18px)}
+.topbar .avatar{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:none;font:800 13px var(--lf-display);color:#06141a;background:linear-gradient(135deg,#5eead4,#14899a)}
+.topbar .chev{margin-left:6px;color:var(--lf-muted);transition:transform .2s}
+.topbar .chip[aria-expanded="true"] .chev{transform:rotate(180deg);color:var(--lf-teal-hi)}
+.topbar .profile .chip{min-width:210px}
+.topbar .wrap{position:relative}
+.topbar .menu{position:absolute;top:calc(100% + 10px);right:0;z-index:60;background:var(--lf-surface);border:1px solid var(--lf-line);border-radius:16px;box-shadow:var(--lf-shadow);padding:8px;display:block;color:var(--lf-text);animation:lfPop .14s ease-out}
+@keyframes lfPop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.topbar .menu.notif{width:340px}
+.topbar .menu.prof{width:272px}
+.topbar .menu h3{display:flex;justify-content:space-between;align-items:center;padding:8px 10px 10px;font:600 15px var(--lf-display);color:var(--lf-head)}
+.topbar .menu h3 button{font:500 13px var(--lf-body);color:var(--lf-teal-hi);background:none;border:0;padding:0;cursor:pointer}
+.topbar .menu h3 button:hover{text-decoration:underline}
+.topbar .n{display:flex;gap:11px;padding:10px;border-radius:11px;transition:background .15s}
+.topbar .n:hover{background:var(--lf-soft)}
+.topbar .n .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;background:var(--lf-soft);color:var(--lf-teal-hi)}
+.topbar .n.crit .ic{background:rgba(239,68,68,.14);color:#ef4444}
+.topbar .n.warn .ic{background:rgba(245,158,11,.15);color:#d97706}
+.topbar .n strong{display:block;font:600 14px/1.25 var(--lf-body);color:var(--lf-head)}
+.topbar .n p{margin-top:2px;font-size:13px;line-height:1.4;color:var(--lf-muted)}
+.topbar .n time{display:block;margin-top:4px;font-size:12px;color:var(--lf-muted)}
+.topbar .who{display:flex;align-items:center;gap:11px;padding:10px}
+.topbar .who .avatar{width:42px;height:42px}
+.topbar .who strong{display:block;font:600 15px var(--lf-display);color:var(--lf-head)}
+.topbar .who span{display:block;margin-top:2px;font-size:13px;color:var(--lf-muted)}
+.topbar .sep{height:1px;margin:6px 4px;background:var(--lf-line)}
+.topbar .item{width:100%;display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;text-align:left;font-size:14px;font-weight:500;color:var(--lf-text);background:none;border:0;cursor:pointer}
+.topbar .item svg{color:var(--lf-muted)}
+.topbar .item:hover{background:var(--lf-soft)}
+.topbar .item:hover svg{color:var(--lf-teal-hi)}
+.topbar .item.out{color:var(--lf-danger)}
+.topbar .item.out svg{color:var(--lf-danger)}
+@media (max-width:860px){
+  .topbar{padding:0 14px}
+  .topbar .theme .txt,.topbar .profile .txt,.topbar .chev,.topbar .divider{display:none}
+  .topbar .theme,.topbar .profile .chip{min-width:0;padding:5px}
+  .topbar .switch{display:none}
+  .topbar .profile .chip{min-width:0}
+  .topbar .title h1{font-size:17px}
+}
+@media (max-width:560px){
+  .topbar .title small{display:none}
+  .topbar .menu.notif{position:fixed;left:12px;right:12px;top:86px;width:auto}
+  .topbar .menu.prof{position:fixed;right:12px;top:86px}
+}
+
+
+
+/* =========================================================
+   LOGIFORGE AI — EXACT REFERENCE SHELL
+   Isolated selectors so existing page CSS remains functional.
+   ========================================================= */
+
+:root{
+  --lf-bg:#eef3f2;
+  --lf-side:#f7f9f8;
+  --lf-bar:#f7f9f8;
+  --lf-surface:#ffffff;
+  --lf-soft:#e6eeed;
+  --lf-text:#13262c;
+  --lf-head:#0a2a33;
+  --lf-muted:#5b6f75;
+  --lf-line:#d5dfe0;
+  --lf-teal:#0f6b78;
+  --lf-teal-hi:#14899a;
+  --lf-mint:#5eead4;
+  --lf-active:#dcefed;
+  --lf-danger:#c2410c;
+  --lf-shadow:0 24px 50px -18px rgba(10,42,51,.35);
+  --lf-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --lf-body:'Figtree','Segoe UI',system-ui,sans-serif;
+}
+
+html.dark{
+  --lf-bg:#050f14;
+  --lf-side:#081922;
+  --lf-bar:#081922;
+  --lf-surface:#0d2530;
+  --lf-soft:#12303c;
+  --lf-text:#e3eeed;
+  --lf-head:#f2fbfa;
+  --lf-muted:#8fa6ab;
+  --lf-line:#173540;
+  --lf-teal:#14899a;
+  --lf-teal-hi:#5eead4;
+  --lf-active:#10303a;
+  --lf-danger:#fb923c;
+  --lf-shadow:0 24px 50px -18px rgba(0,0,0,.7);
+}
+
+.lf-shell,
+.lf-shell *{
+  box-sizing:border-box;
+}
+
+.lf-shell{
+  display:grid;
+  grid-template-columns:268px minmax(0,1fr);
+  width:100%;
+  height:100vh;
+  min-height:100vh;
+  overflow:hidden;
+  background:var(--lf-bg);
+  color:var(--lf-text);
+  font-family:var(--lf-body);
+  transition:grid-template-columns .22s ease;
+}
+
+.lf-shell.collapsed{
+  grid-template-columns:80px minmax(0,1fr);
+}
+
+.lf-side{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:var(--lf-side);
+  border-right:1px solid var(--lf-line);
+  z-index:40;
+  transition:background .25s,border-color .25s;
+}
+
+.lf-brand{
+  position:relative;
+  height:76px;
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  border-bottom:1px solid var(--lf-line);
+  overflow:hidden;
+}
+
+.lf-brand-link{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+  color:inherit;
+  text-decoration:none;
+}
+
+.lf-brand-logo{
+  width:48px;
+  height:48px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:linear-gradient(135deg,#5eead4,#8bdce5);
+  color:#06141a;
+  font:800 24px/1 var(--lf-display);
+}
+
+.lf-brand-copy{
+  min-width:0;
+}
+
+.lf-brand-copy b{
+  display:block;
+  white-space:nowrap;
+  font:800 19px/1 var(--lf-display);
+  letter-spacing:-.03em;
+  color:var(--lf-head);
+}
+
+.lf-brand-copy b i{
+  font-style:normal;
+  color:var(--lf-teal-hi);
+  margin-left:3px;
+}
+
+.lf-brand-copy small{
+  display:block;
+  margin-top:7px;
+  white-space:nowrap;
+  font:600 12px/1 var(--lf-body);
+  letter-spacing:.20em;
+  color:var(--lf-teal-hi);
+}
+
+.lf-fold{
+  position:absolute;
+  top:62px;
+  right:-14px;
+  width:28px;
+  height:28px;
+  border:1px solid var(--lf-line);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--lf-surface);
+  color:var(--lf-muted);
+  z-index:50;
+  transition:color .15s,border-color .15s,transform .15s;
+}
+
+.lf-fold:hover{
+  color:var(--lf-teal-hi);
+  border-color:var(--lf-teal-hi);
+}
+
+.lf-nav{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:14px 12px 10px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--lf-line) transparent;
+}
+
+.lf-nav::-webkit-scrollbar{
+  width:6px;
+}
+
+.lf-nav::-webkit-scrollbar-thumb{
+  background:var(--lf-line);
+  border-radius:6px;
+}
+
+.lf-nav::-webkit-scrollbar-thumb:hover{
+  background:var(--lf-muted);
+}
+
+.lf-group{
+  margin-bottom:10px;
+}
+
+.lf-group h2{
+  padding:10px 12px 6px;
+  font:600 13px/1 var(--lf-body);
+  color:var(--lf-muted);
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+.lf-link{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  width:100%;
+  min-height:44px;
+  padding:0 12px;
+  margin-bottom:2px;
+  border:0;
+  border-radius:12px;
+  background:none;
+  color:var(--lf-muted);
+  text-align:left;
+  text-decoration:none;
+  font:500 15px/1 var(--lf-body);
+  white-space:nowrap;
+  overflow:hidden;
+  transition:background .15s,color .15s;
+}
+
+.lf-link:hover{
+  background:var(--lf-soft);
+  color:var(--lf-head);
+}
+
+.lf-link.active{
+  background:var(--lf-active);
+  color:var(--lf-teal-hi);
+  font-weight:600;
+}
+
+.lf-link.active::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:11px;
+  bottom:11px;
+  width:3px;
+  border-radius:3px;
+  background:var(--lf-teal-hi);
+}
+
+.lf-i{
+  width:19px;
+  height:19px;
+  flex:none;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.lf-label{
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.lf-badge{
+  margin-left:auto;
+  min-width:22px;
+  height:22px;
+  padding:0 7px;
+  display:grid;
+  place-items:center;
+  border-radius:999px;
+  background:#dc2626;
+  color:#fff;
+  font:700 12px/1 var(--lf-body);
+  font-style:normal;
+}
+
+.lf-foot{
+  flex:none;
+  padding:10px 12px 14px;
+  border-top:1px solid var(--lf-line);
+}
+
+.lf-logout:hover{
+  color:var(--lf-danger);
+  background:rgba(220,38,38,.1);
+}
+
+.lf-scrim{
+  display:none;
+}
+
+.lf-main{
+  min-width:0;
+  min-height:0;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:var(--lf-bg);
+}
+
+.lf-top{
+  position:relative;
+  flex:none;
+  height:76px;
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:0 26px;
+  background:var(--lf-bar);
+  border-bottom:1px solid var(--lf-line);
+  z-index:50;
+}
+
+.lf-top-title{
+  min-width:0;
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.lf-top-title small{
+  display:block;
+  font-size:13px;
+  font-weight:500;
+  color:var(--lf-muted);
+}
+
+.lf-top-title h1{
+  margin:2px 0 0;
+  font:600 21px/1.15 var(--lf-display);
+  letter-spacing:-.025em;
+  color:var(--lf-head);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.lf-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex:none;
+}
+
+.lf-wrap{
+  position:relative;
+}
+
+.lf-chip{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  height:50px;
+  min-height:50px;
+  padding:5px 12px 5px 6px;
+  border:1px solid var(--lf-line);
+  border-radius:14px;
+  background:var(--lf-surface);
+  color:var(--lf-text);
+  text-align:left;
+  transition:border-color .15s,background .15s,transform .1s;
+}
+
+.lf-chip:hover{
+  border-color:var(--lf-teal-hi);
+}
+
+.lf-chip:active{
+  transform:scale(.985);
+}
+
+.lf-ico{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:var(--lf-soft);
+  color:var(--lf-teal-hi);
+  flex:none;
+}
+
+.lf-txt{
+  display:block;
+  min-width:0;
+}
+
+.lf-chip b{
+  display:block;
+  font:600 14px/1.1 var(--lf-display);
+  color:var(--lf-head);
+}
+
+.lf-sub{
+  display:block;
+  margin-top:3px;
+  font:400 12px/1 var(--lf-body);
+  color:var(--lf-muted);
+}
+
+.lf-bell{
+  width:50px;
+  padding:0;
+  justify-content:center;
+  color:var(--lf-muted);
+}
+
+.lf-bell:hover{
+  color:var(--lf-teal-hi);
+}
+
+.lf-dot{
+  position:absolute;
+  top:11px;
+  right:12px;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#ef4444;
+  box-shadow:0 0 0 2px var(--lf-surface);
+}
+
+.lf-bell.read .lf-dot{
+  display:none;
+}
+
+.lf-theme{
+  min-width:144px;
+}
+
+.lf-switch{
+  width:44px;
+  height:26px;
+  flex:none;
+  position:relative;
+  margin-left:4px;
+  border:1px solid var(--lf-line);
+  border-radius:999px;
+  background:var(--lf-soft);
+  transition:background .2s;
+}
+
+.lf-switch::after{
+  content:"";
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:var(--lf-teal-hi);
+  transition:transform .2s;
+}
+
+html.dark .lf-switch::after{
+  transform:translateX(18px);
+}
+
+.lf-divider{
+  width:1px;
+  height:34px;
+  background:var(--lf-line);
+  margin:0 4px;
+}
+
+.lf-profile-chip{
+  min-width:210px;
+}
+
+.lf-avatar{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  flex:none;
+  color:#06141a;
+  background:linear-gradient(135deg,#5eead4,#14899a);
+  font:800 13px/1 var(--lf-display);
+}
+
+.lf-chevron{
+  margin-left:6px;
+  color:var(--lf-muted);
+  transition:transform .2s,color .2s;
+}
+
+.lf-chip[aria-expanded="true"] .lf-chevron{
+  transform:rotate(180deg);
+  color:var(--lf-teal-hi);
+}
+
+.lf-menu{
+  position:absolute;
+  top:calc(100% + 10px);
+  right:0;
+  z-index:100;
+  display:block;
+  padding:8px;
+  border:1px solid var(--lf-line);
+  border-radius:16px;
+  background:var(--lf-surface);
+  color:var(--lf-text);
+  box-shadow:var(--lf-shadow);
+  animation:lfPop .14s ease-out;
+}
+
+@keyframes lfPop{
+  from{opacity:0;transform:translateY(-4px)}
+  to{opacity:1;transform:none}
+}
+
+.lf-notif-menu{
+  width:340px;
+}
+
+.lf-profile-menu{
+  width:272px;
+}
+
+.lf-menu h3{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 10px 10px;
+  font:600 15px/1 var(--lf-display);
+  color:var(--lf-head);
+}
+
+.lf-menu h3 button{
+  padding:0;
+  border:0;
+  background:none;
+  color:var(--lf-teal-hi);
+  font:500 13px var(--lf-body);
+}
+
+.lf-menu h3 button:hover{
+  text-decoration:underline;
+}
+
+.lf-notification{
+  display:flex;
+  gap:11px;
+  padding:10px;
+  border-radius:11px;
+  transition:background .15s;
+}
+
+.lf-notification:hover{
+  background:var(--lf-soft);
+}
+
+.lf-notification-icon{
+  width:34px;
+  height:34px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:var(--lf-soft);
+  color:var(--lf-teal-hi);
+}
+
+.lf-notification.critical .lf-notification-icon{
+  color:#fb7185;
+}
+
+.lf-notification.warning .lf-notification-icon{
+  color:#fbbf24;
+}
+
+.lf-notification strong{
+  display:block;
+  font:600 12px/1.3 var(--lf-display);
+  color:var(--lf-head);
+}
+
+.lf-notification p{
+  margin:4px 0 0;
+  font:400 11px/1.45 var(--lf-body);
+  color:var(--lf-muted);
+}
+
+.lf-notification time{
+  display:block;
+  margin-top:5px;
+  font-size:9px;
+  color:var(--lf-muted);
+}
+
+.lf-notification.unread{
+  background:color-mix(in srgb,var(--lf-teal) 5%,transparent);
+}
+
+.lf-who{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px;
+}
+
+.lf-who > div{
+  min-width:0;
+}
+
+.lf-who strong{
+  display:block;
+  font:600 14px/1.2 var(--lf-display);
+  color:var(--lf-head);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.lf-who span:not(.lf-avatar){
+  display:block;
+  margin-top:4px;
+  font:400 11px/1 var(--lf-body);
+  color:var(--lf-muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.lf-sep{
+  height:1px;
+  margin:6px 2px;
+  background:var(--lf-line);
+}
+
+.lf-item{
+  width:100%;
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:0 10px;
+  border:0;
+  border-radius:10px;
+  background:none;
+  color:var(--lf-text);
+  font:500 13px/1 var(--lf-body);
+  text-align:left;
+}
+
+.lf-item:hover{
+  background:var(--lf-soft);
+}
+
+.lf-item-out{
+  color:#ef4444;
+}
+
+.lf-item-out:hover{
+  color:#ef4444;
+  background:rgba(239,68,68,.08);
+}
+
+.lf-content{
+  flex:1;
+  min-width:0;
+  min-height:0;
+  overflow:auto;
+  overflow-x:hidden;
+  scrollbar-width:thin;
+  scrollbar-color:var(--lf-line) transparent;
+}
+
+.lf-content::-webkit-scrollbar{
+  width:8px;
+}
+
+.lf-content::-webkit-scrollbar-thumb{
+  background:var(--lf-line);
+  border-radius:8px;
+}
+
+.lf-menu-btn,
+.lf-mobile-close{
+  display:none;
+}
+
+@media (max-width:900px){
+  .lf-shell,
+  .lf-shell.collapsed{
+    display:block;
+    position:relative;
+    height:100vh;
+  }
+
+  .lf-side{
+    position:fixed;
+    inset:0 auto 0 0;
+    width:min(300px,86vw);
+    height:100vh;
+    transform:translateX(-100%);
+    box-shadow:none;
+    transition:transform .25s ease;
+    z-index:100;
+  }
+
+  .lf-shell.open .lf-side{
+    transform:none;
+    box-shadow:0 0 60px rgba(0,0,0,.5);
+  }
+
+  .lf-shell.collapsed .lf-side{
+    width:min(300px,86vw);
+  }
+
+  .lf-shell.collapsed .lf-label,
+  .lf-shell.collapsed .lf-brand-copy,
+  .lf-shell.collapsed .lf-group h2{
+    display:block;
+  }
+
+  .lf-fold{
+    display:none;
+  }
+
+  .lf-scrim{
+    position:fixed;
+    inset:0;
+    display:block;
+    z-index:90;
+    border:0;
+    background:rgba(3,10,14,.55);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s;
+  }
+
+  .lf-shell.open .lf-scrim{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .lf-main{
+    width:100%;
+    height:100vh;
+  }
+
+  .lf-menu-btn{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    flex:none;
+    border:1px solid var(--lf-line);
+    border-radius:12px;
+    background:var(--lf-surface);
+    color:var(--lf-text);
+  }
+
+  .lf-mobile-close{
+    display:grid;
+    place-items:center;
+    width:34px;
+    height:34px;
+    margin-left:auto;
+    border:0;
+    background:none;
+    color:var(--lf-muted);
+  }
+
+  .lf-top{
+    padding:0 16px;
+  }
+
+  .lf-actions{
+    gap:7px;
+  }
+
+  .lf-theme{
+    min-width:50px;
+    width:50px;
+    padding:5px;
+    justify-content:center;
+  }
+
+  .lf-theme .lf-txt,
+  .lf-theme .lf-switch,
+  .lf-divider,
+  .lf-profile .lf-txt,
+  .lf-profile .lf-chevron{
+    display:none;
+  }
+
+  .lf-profile-chip{
+    min-width:50px;
+    padding:5px;
+    justify-content:center;
+  }
+}
+
+@media (max-width:560px){
+  .lf-top-title h1{
+    font-size:17px;
+  }
+
+  .lf-top-title small{
+    display:none;
+  }
+
+  .lf-notif-menu{
+    position:fixed;
+    left:12px;
+    right:12px;
+    top:86px;
+    width:auto;
+  }
+
+  .lf-profile-menu{
+    position:fixed;
+    right:12px;
+    top:86px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .lf-shell *,
+  .lf-shell *::before,
+  .lf-shell *::after{
+    transition:none!important;
+    animation:none!important;
+  }
+}
+
+/* =========================================================
+   FINAL SIDEBAR COLLAPSE / FOLD BUTTON FIX
+   ========================================================= */
+
+.sidebar {
+  overflow: visible;
+}
+
+.sidebar.collapsed {
+  width: 76px;
+}
+
+.sidebar.collapsed .nav-section,
+.sidebar.collapsed .sidebar-label,
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .sidebar-link span,
+.sidebar.collapsed .sidebar-brand strong,
+.sidebar.collapsed .sidebar-brand span,
+.sidebar.collapsed .system-status,
+.sidebar.collapsed .sidebar-arrow {
+  display: none;
+}
+
+.sidebar.collapsed .brand-row,
+.sidebar.collapsed .sidebar-brand {
+  justify-content: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.sidebar.collapsed .side-nav,
+.sidebar.collapsed .sidebar-nav {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.sidebar.collapsed .nav-item,
+.sidebar.collapsed .sidebar-link {
+  justify-content: center;
+  gap: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar.collapsed .sidebar-bottom {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+/* Keep only the navigation itself scrollable. */
+.side-nav,
+.sidebar-nav {
+  scrollbar-width: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.side-nav::-webkit-scrollbar,
+.sidebar-nav::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* Clean circular collapse control. */
+.collapse-btn {
+  position: absolute;
+  top: 60px;
+  right: -14px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  z-index: 1001;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, .08);
+  transition:
+    color .18s ease,
+    border-color .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+.collapse-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--surface);
+  box-shadow: 0 6px 18px rgba(34, 211, 238, .14);
+}
+
+.collapse-btn svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  transition: transform .22s ease;
+}
+
+.sidebar.collapsed .collapse-btn svg {
+  transform: rotate(180deg);
+}
+
+/* Make sure the main content starts exactly at the collapsed edge. */
+.main-area {
+  margin-left: 250px;
+  min-width: 0;
+}
+
+.main-area.wide,
+.sidebar.collapsed + .main-area {
+  margin-left: 76px;
+}
+
+/* Remove any accidental gap/strip created by legacy layout rules. */
+.app-shell {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+@media (max-width: 800px) {
+  .sidebar.collapsed {
+    width: 250px;
+  }
+
+  .sidebar.collapsed .nav-section,
+  .sidebar.collapsed .sidebar-label,
+  .sidebar.collapsed .nav-item span,
+  .sidebar.collapsed .sidebar-link span,
+  .sidebar.collapsed .sidebar-brand strong,
+  .sidebar.collapsed .sidebar-brand span,
+  .sidebar.collapsed .system-status,
+  .sidebar.collapsed .sidebar-arrow {
+    display: block;
+  }
+
+  .sidebar.collapsed .brand-row,
+  .sidebar.collapsed .sidebar-brand {
+    justify-content: flex-start;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .sidebar.collapsed .nav-item,
+  .sidebar.collapsed .sidebar-link {
+    justify-content: flex-start;
+    gap: 12px;
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+
+  .main-area,
+  .main-area.wide,
+  .sidebar.collapsed + .main-area {
+    margin-left: 0;
+  }
+
+  .collapse-btn {
+    display: none;
+  }
+}
+
+/* =========================================================
+   FINAL LOGIFORGE SIDEBAR ALIGNMENT
+   ========================================================= */
+
+.lf-shell {
+  display: grid;
+  grid-template-columns: 268px minmax(0, 1fr);
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.lf-shell.collapsed {
+  grid-template-columns: 76px minmax(0, 1fr);
+}
+
+/* Sidebar */
+.lf-side {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+
+  /* IMPORTANT */
+  overflow: visible !important;
+
+  background: var(--lf-side);
+  border-right: 1px solid var(--lf-line);
+  z-index: 100;
+}
+
+/* Navigation itself handles scrolling */
+.lf-nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.lf-nav::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* Collapse / Expand button */
+.lf-fold {
+  position: absolute;
+
+  top: 62px;
+  right: -14px;
+
+  width: 28px;
+  height: 28px;
+
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid var(--lf-line);
+  border-radius: 50%;
+
+  background: var(--lf-surface);
+  color: var(--lf-muted);
+
+  z-index: 1000;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 12px rgba(15, 23, 42, 0.10);
+
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.lf-fold:hover {
+  color: var(--lf-teal-hi);
+  border-color: var(--lf-teal-hi);
+
+  box-shadow:
+    0 0 0 4px rgba(94, 234, 212, 0.08);
+}
+
+.lf-fold svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.22s ease;
+}
+
+.lf-shell.collapsed .lf-fold svg {
+  transform: rotate(180deg);
+}
+
+/* Main area stays perfectly aligned */
+.lf-main {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: var(--lf-bg);
+}
+
+/* Collapsed labels */
+.lf-shell.collapsed .lf-label,
+.lf-shell.collapsed .lf-brand-copy,
+.lf-shell.collapsed .lf-group h2 {
+  display: none;
+}
+
+/* Center icons in collapsed sidebar */
+.lf-shell.collapsed .lf-link {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.lf-shell.collapsed .lf-brand {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.lf-shell.collapsed .lf-brand-link {
+  justify-content: center;
+}
+
+.lf-shell.collapsed .lf-foot {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* Desktop only */
+@media (min-width: 801px) {
+  .lf-shell.collapsed {
+    grid-template-columns: 76px minmax(0, 1fr);
+  }
+
+  .lf-shell.collapsed .lf-side {
+    width: 76px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 800px) {
+  .lf-shell,
+  .lf-shell.collapsed {
+    display: block;
+    width: 100%;
+  }
+
+  .lf-side,
+  .lf-shell.collapsed .lf-side {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    width: 268px;
+
+    transform: translateX(-100%);
+
+    overflow: visible;
+
+    transition:
+      transform 0.25s ease;
+  }
+
+  .lf-shell.open .lf-side {
+    transform: translateX(0);
+  }
+
+  .lf-fold {
+    display: none;
+  }
+
+  .lf-main {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .lf-shell.collapsed .lf-label,
+  .lf-shell.collapsed .lf-brand-copy,
+  .lf-shell.collapsed .lf-group h2 {
+    display: block;
+  }
+
+  .lf-shell.collapsed .lf-link {
+    justify-content: flex-start;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .lf-shell.collapsed .lf-brand {
+    justify-content: flex-start;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .lf-shell.collapsed .lf-brand-link {
+    justify-content: flex-start;
+  }
+}
+
+/* =========================================================
+   LOGIFORGE AI BRAND LOGO
+   ========================================================= */
+
+.lf-brand {
+  height: 94px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.lf-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.lf-new-logo {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 17px;
+
+  background: #132833;
+  color: #8fe5d5;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(143, 229, 213, 0.06);
+}
+
+.lf-new-logo svg {
+  width: 38px;
+  height: 38px;
+  display: block;
+}
+
+.lf-brand-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1;
+}
+
+.lf-brand-copy b {
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  white-space: nowrap;
+  color: var(--lf-text);
+}
+
+.lf-brand-copy b i {
+  font-style: normal;
+  color: var(--lf-teal-hi);
+}
+
+.lf-brand-copy small {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: var(--lf-muted);
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   COLLAPSED SIDEBAR
+   ========================================================= */
+
+.lf-shell.collapsed .lf-brand {
+  padding: 0;
+  justify-content: center;
+}
+
+.lf-shell.collapsed .lf-brand-link {
+  justify-content: center;
+}
+
+.lf-shell.collapsed .lf-new-logo {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 14px;
+}
+
+.lf-shell.collapsed .lf-new-logo svg {
+  width: 32px;
+  height: 32px;
+}
+
+.lf-shell.collapsed .lf-brand-copy {
+  display: none;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .lf-brand {
+    height: 88px;
+    padding: 0 18px;
+  }
+
+  .lf-brand-copy b {
+    font-size: 23px;
+  }
+
+  .lf-brand-copy small {
+    font-size: 13px;
+  }
+
+  .lf-shell.collapsed .lf-brand {
+    padding: 0 18px;
+    justify-content: flex-start;
+  }
+
+  .lf-shell.collapsed .lf-brand-link {
+    justify-content: flex-start;
+  }
+
+  .lf-shell.collapsed .lf-brand-copy {
+    display: flex;
+  }
+
+  .lf-shell.collapsed .lf-new-logo {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+  }
+
+  .lf-shell.collapsed .lf-new-logo svg {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+
+/* =========================================================
+   LOGIFORGE AI — FINAL SIDEBAR / BRAND FIX
+   This override is intentionally placed LAST so older
+   sidebar/logo rules cannot override the final design.
+   ========================================================= */
+
+.lf-shell {
+  display: grid;
+  grid-template-columns: 268px minmax(0, 1fr);
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--lf-bg);
+  color: var(--lf-text);
+}
+
+.lf-shell.collapsed {
+  grid-template-columns: 76px minmax(0, 1fr);
+}
+
+/* Sidebar */
+.lf-side {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: visible !important;
+  background: var(--lf-side);
+  border-right: 1px solid var(--lf-line);
+  z-index: 100;
+}
+
+/* Navigation scrolls, sidebar itself does not */
+.lf-nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.lf-nav::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* =========================================================
+   BRAND — MATCH REFERENCE
+   268px sidebar / 76px brand / 40px logo
+   ========================================================= */
+
+.lf-brand {
+  position: relative;
+  height: 76px;
+  min-height: 76px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--lf-line);
+  overflow: visible;
+}
+
+.lf-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Handles both class names used by the React layout */
+.lf-brand-logo,
+.lf-new-logo {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  flex: 0 0 40px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 13px;
+
+  background: #0a2a33 !important;
+  color: #5eead4 !important;
+
+  box-shadow: inset 0 0 0 1px rgba(94, 234, 212, 0.08);
+
+  overflow: hidden;
+}
+
+.lf-brand-logo svg,
+.lf-new-logo svg {
+  width: 30px !important;
+  height: 30px !important;
+  display: block;
+}
+
+/* Brand copy */
+.lf-brand-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1;
+}
+
+.lf-brand-copy b {
+  display: block;
+  margin: 0;
+  white-space: nowrap;
+
+  font: 800 19px/1 var(--lf-display);
+
+  letter-spacing: -0.03em;
+  color: var(--lf-head);
+}
+
+.lf-brand-copy b i {
+  font-style: normal;
+  color: var(--lf-teal-hi);
+  margin-left: 3px;
+}
+
+.lf-brand-copy small {
+  display: block;
+  margin-top: 5px;
+
+  white-space: nowrap;
+
+  font: 600 12.5px/1 var(--lf-body);
+
+  letter-spacing: 0;
+  color: var(--lf-muted);
+}
+
+/* =========================================================
+   COLLAPSED SIDEBAR
+   ========================================================= */
+
+.lf-shell.collapsed .lf-brand {
+  padding: 0;
+  justify-content: center;
+}
+
+.lf-shell.collapsed .lf-brand-link {
+  justify-content: center;
+}
+
+.lf-shell.collapsed .lf-label,
+.lf-shell.collapsed .lf-brand-copy,
+.lf-shell.collapsed .lf-group h2 {
+  display: none;
+}
+
+.lf-shell.collapsed .lf-link {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.lf-shell.collapsed .lf-brand-logo,
+.lf-shell.collapsed .lf-new-logo {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  flex-basis: 40px;
+}
+
+/* =========================================================
+   COLLAPSE BUTTON
+   ========================================================= */
+
+.lf-fold {
+  position: absolute;
+
+  top: 62px;
+  right: -14px;
+
+  width: 28px;
+  height: 28px;
+
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid var(--lf-line);
+  border-radius: 50%;
+
+  background: var(--lf-surface);
+  color: var(--lf-muted);
+
+  z-index: 1000;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.10);
+
+  transition:
+    color .18s ease,
+    border-color .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+.lf-fold:hover {
+  color: var(--lf-teal-hi);
+  border-color: var(--lf-teal-hi);
+  background: var(--lf-surface);
+  box-shadow: 0 0 0 4px rgba(94, 234, 212, .08);
+}
+
+.lf-fold svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.lf-main {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: var(--lf-bg);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .lf-shell,
+  .lf-shell.collapsed {
+    display: block;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .lf-side,
+  .lf-shell.collapsed .lf-side {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    width: 268px;
+
+    transform: translateX(-100%);
+
+    overflow: visible !important;
+
+    transition: transform .25s ease;
+  }
+
+  .lf-shell.open .lf-side {
+    transform: translateX(0);
+  }
+
+  .lf-fold {
+    display: none;
+  }
+
+  .lf-main {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .lf-shell.collapsed .lf-label,
+  .lf-shell.collapsed .lf-brand-copy,
+  .lf-shell.collapsed .lf-group h2 {
+    display: block;
+  }
+
+  .lf-shell.collapsed .lf-link {
+    justify-content: flex-start;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .lf-shell.collapsed .lf-brand {
+    justify-content: flex-start;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .lf-shell.collapsed .lf-brand-link {
+    justify-content: flex-start;
+  }
+
+  .lf-shell.collapsed .lf-brand-logo,
+  .lf-shell.collapsed .lf-new-logo {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+  }
+}
+
+/* =========================================================
+   SAFETY: PREVENT OLD LOGO SIZE RULES FROM WINNING
+   ========================================================= */
+
+.lf-brand .lf-new-logo {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+}
+
+.lf-brand .lf-new-logo svg {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.lf-brand .lf-brand-logo {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+}
+
+/* =========================================================
+   LOGIFORGE AI SIDEBAR ALERT BADGE — SMALLER SIZE
+   ========================================================= */
+.lf-nav .lf-link {
+  position: relative;
+}
+
+.lf-nav .lf-link .lf-badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #ffffff;
+  font-family: var(--lf-body);
+  font-size: 10px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1;
+  transform: none;
+  pointer-events: none;
+}
+
+.lf-nav .lf-link .lf-label {
+  min-width: 0;
+}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+
 import {
   CheckCircle2,
   Clock3,
@@ -6,9 +7,14 @@ import {
   Plus,
   RefreshCw,
   Send,
-  XCircle,
 } from "lucide-react";
+
 import api from "../lib/api";
+
+
+// ======================================================
+// TYPES
+// ======================================================
 
 type Location = {
   id: string;
@@ -26,21 +32,42 @@ type Item = {
 
 type SupplyRequest = {
   id: string;
+
   request_code: string;
+
   location_id: string;
   item_id: string;
+
   quantity: number | string;
+
   required_by: string;
-  priority: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL" | string;
+
+  priority:
+    | "LOW"
+    | "MEDIUM"
+    | "HIGH"
+    | "CRITICAL"
+    | string;
+
   reason: string;
+
   status: string;
+
   location_code?: string;
   location_name?: string;
+
   item_code?: string;
   item_name?: string;
+
   category?: string;
+
   created_at: string;
 };
+
+
+// ======================================================
+// CONSTANTS
+// ======================================================
 
 const STATUS_OPTIONS = [
   "DRAFT",
@@ -54,26 +81,40 @@ const STATUS_OPTIONS = [
   "CANCELLED",
 ];
 
+
+// ======================================================
+// COMPONENT
+// ======================================================
+
 export default function Requests() {
-  const [requests, setRequests] = useState<
-    SupplyRequest[]
-  >([]);
 
-  const [locations, setLocations] = useState<
-    Location[]
-  >([]);
+  // ====================================================
+  // STATE
+  // ====================================================
 
-  const [items, setItems] = useState<Item[]>([]);
+  const [requests, setRequests] =
+    useState<SupplyRequest[]>([]);
 
-  const [loading, setLoading] = useState(true);
-  const [creating, setCreating] = useState(false);
-  const [updating, setUpdating] = useState<
-    string | null
-  >(null);
+  const [locations, setLocations] =
+    useState<Location[]>([]);
 
-  const [error, setError] = useState("");
+  const [items, setItems] =
+    useState<Item[]>([]);
 
-  const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] =
+    useState(true);
+
+  const [creating, setCreating] =
+    useState(false);
+
+  const [updating, setUpdating] =
+    useState<string | null>(null);
+
+  const [error, setError] =
+    useState("");
+
+  const [showForm, setShowForm] =
+    useState(false);
 
   const [statusFilter, setStatusFilter] =
     useState("ALL");
@@ -90,39 +131,77 @@ export default function Requests() {
     reason: "",
   });
 
-  /* =========================================================
-     LOAD REQUESTS
-  ========================================================== */
+
+  // ====================================================
+  // LOAD REQUESTS
+  // ====================================================
 
   const loadRequests = async () => {
+
     try {
+
       setLoading(true);
       setError("");
 
-      const response = await api.get("/requests");
+      const response =
+        await api.get("/requests");
 
-      setRequests(response.data?.data || []);
+      setRequests(
+        response.data?.data || []
+      );
+
     } catch (err: any) {
+
+      console.error(
+        "Request loading error:",
+        err
+      );
+
+      if (
+        err?.response?.status === 401
+      ) {
+
+        localStorage.removeItem(
+          "logiforge_token"
+        );
+
+        localStorage.removeItem(
+          "logiforge_user"
+        );
+
+        window.location.href =
+          "/login";
+
+        return;
+      }
+
       setError(
         err?.response?.data?.message ||
           "Unable to load supply requests."
       );
+
     } finally {
+
       setLoading(false);
     }
   };
 
-  /* =========================================================
-     LOAD LOCATIONS + ITEMS
-  ========================================================== */
+
+  // ====================================================
+  // LOAD LOCATIONS + ITEMS
+  // ====================================================
 
   const loadFormData = async () => {
+
     try {
-      const [locationsResponse, itemsResponse] =
-        await Promise.all([
-          api.get("/locations"),
-          api.get("/items"),
-        ]);
+
+      const [
+        locationsResponse,
+        itemsResponse,
+      ] = await Promise.all([
+        api.get("/locations"),
+        api.get("/items"),
+      ]);
 
       setLocations(
         locationsResponse.data?.data || []
@@ -131,7 +210,14 @@ export default function Requests() {
       setItems(
         itemsResponse.data?.data || []
       );
+
     } catch (err: any) {
+
+      console.error(
+        "Request form data error:",
+        err
+      );
+
       setError(
         err?.response?.data?.message ||
           "Unable to load locations and items."
@@ -139,59 +225,106 @@ export default function Requests() {
     }
   };
 
+
+  // ====================================================
+  // INITIAL LOAD
+  // ====================================================
+
   useEffect(() => {
+
     loadRequests();
     loadFormData();
+
   }, []);
 
-  /* =========================================================
-     CREATE REQUEST
-  ========================================================== */
+
+  // ====================================================
+  // CREATE REQUEST
+  // ====================================================
 
   const createRequest = async (
     event: React.FormEvent
   ) => {
+
     event.preventDefault();
 
     if (!form.locationId) {
-      setError("Please select a location.");
+
+      setError(
+        "Please select a location."
+      );
+
       return;
     }
 
     if (!form.itemId) {
-      setError("Please select an item.");
+
+      setError(
+        "Please select an item."
+      );
+
       return;
     }
 
-    if (!form.quantity || Number(form.quantity) <= 0) {
-      setError("Please enter a valid quantity.");
+    if (
+      !form.quantity ||
+      Number(form.quantity) <= 0
+    ) {
+
+      setError(
+        "Please enter a valid quantity."
+      );
+
       return;
     }
 
     if (!form.requiredBy) {
-      setError("Please select required-by date.");
+
+      setError(
+        "Please select required-by date."
+      );
+
       return;
     }
 
-    if (form.reason.trim().length < 3) {
+    if (
+      form.reason.trim().length < 3
+    ) {
+
       setError(
         "Please provide a valid reason."
       );
+
       return;
     }
 
     try {
+
       setCreating(true);
       setError("");
 
-      await api.post("/requests", {
-        locationId: form.locationId,
-        itemId: form.itemId,
-        quantity: Number(form.quantity),
-        requiredBy: form.requiredBy,
-        priority: form.priority,
-        reason: form.reason.trim(),
-      });
+      await api.post(
+        "/requests",
+        {
+          locationId:
+            form.locationId,
+
+          itemId:
+            form.itemId,
+
+          quantity:
+            Number(form.quantity),
+
+          requiredBy:
+            form.requiredBy,
+
+          priority:
+            form.priority,
+
+          reason:
+            form.reason.trim(),
+        }
+      );
 
       setForm({
         locationId: "",
@@ -205,113 +338,233 @@ export default function Requests() {
       setShowForm(false);
 
       await loadRequests();
+
     } catch (err: any) {
+
+      console.error(
+        "Create request error:",
+        err
+      );
+
       setError(
         err?.response?.data?.message ||
           "Unable to create supply request."
       );
+
     } finally {
+
       setCreating(false);
     }
   };
 
-  /* =========================================================
-     UPDATE STATUS
-  ========================================================== */
+
+  // ====================================================
+  // UPDATE REQUEST STATUS
+  // ====================================================
 
   const updateStatus = async (
     id: string,
     status: string
   ) => {
+
     try {
+
       setUpdating(id);
       setError("");
 
       await api.patch(
         `/requests/${id}/status`,
-        { status }
+        {
+          status,
+        }
       );
 
       await loadRequests();
+
     } catch (err: any) {
+
+      console.error(
+        "Status update error:",
+        err
+      );
+
       setError(
         err?.response?.data?.message ||
           "Unable to update request status."
       );
+
     } finally {
+
       setUpdating(null);
     }
   };
 
-  /* =========================================================
-     FILTER
-  ========================================================== */
 
-  const filteredRequests = useMemo(() => {
-    return requests.filter((request) => {
-      const statusMatch =
-        statusFilter === "ALL" ||
-        request.status === statusFilter;
+  // ====================================================
+  // VALID NEXT STATUS
+  // ====================================================
 
-      const priorityMatch =
-        priorityFilter === "ALL" ||
-        request.priority === priorityFilter;
+  const getNextStatuses = (
+    currentStatus: string
+  ) => {
 
-      return statusMatch && priorityMatch;
-    });
-  }, [
-    requests,
-    statusFilter,
-    priorityFilter,
-  ]);
+    const transitions: Record<
+      string,
+      string[]
+    > = {
 
-  /* =========================================================
-     KPI
-  ========================================================== */
+      DRAFT: [
+        "SUBMITTED",
+        "CANCELLED",
+      ],
 
-  const stats = useMemo(() => {
-    return {
-      total: requests.length,
+      SUBMITTED: [
+        "UNDER_REVIEW",
+        "CANCELLED",
+      ],
 
-      critical: requests.filter(
-        (r) => r.priority === "CRITICAL"
-      ).length,
+      UNDER_REVIEW: [
+        "PLANNED",
+        "CANCELLED",
+      ],
 
-      pending: requests.filter(
-        (r) =>
-          r.status === "SUBMITTED" ||
-          r.status === "UNDER_REVIEW"
-      ).length,
+      PLANNED: [
+        "APPROVED",
+        "CANCELLED",
+      ],
 
-      approved: requests.filter(
-        (r) =>
-          r.status === "APPROVED" ||
-          r.status === "IN_TRANSIT"
-      ).length,
+      APPROVED: [
+        "IN_TRANSIT",
+        "CANCELLED",
+      ],
+
+      IN_TRANSIT: [
+        "DELIVERED",
+      ],
+
+      DELIVERED: [
+        "CLOSED",
+      ],
+
+      CLOSED: [],
+
+      CANCELLED: [],
     };
-  }, [requests]);
 
-  /* =========================================================
-     HELPERS
-  ========================================================== */
+    return (
+      transitions[currentStatus] ||
+      []
+    );
+  };
+
+
+  // ====================================================
+  // FILTER REQUESTS
+  // ====================================================
+
+  const filteredRequests =
+    useMemo(() => {
+
+      return requests.filter(
+        (request) => {
+
+          const statusMatch =
+            statusFilter === "ALL" ||
+            request.status ===
+              statusFilter;
+
+          const priorityMatch =
+            priorityFilter === "ALL" ||
+            request.priority ===
+              priorityFilter;
+
+          return (
+            statusMatch &&
+            priorityMatch
+          );
+        }
+      );
+
+    }, [
+      requests,
+      statusFilter,
+      priorityFilter,
+    ]);
+
+
+  // ====================================================
+  // KPI
+  // ====================================================
+
+  const stats =
+    useMemo(() => {
+
+      return {
+
+        total:
+          requests.length,
+
+        critical:
+          requests.filter(
+            (r) =>
+              r.priority ===
+              "CRITICAL"
+          ).length,
+
+        pending:
+          requests.filter(
+            (r) =>
+              r.status ===
+                "SUBMITTED" ||
+              r.status ===
+                "UNDER_REVIEW"
+          ).length,
+
+        approved:
+          requests.filter(
+            (r) =>
+              r.status ===
+                "APPROVED" ||
+              r.status ===
+                "IN_TRANSIT"
+          ).length,
+      };
+
+    }, [requests]);
+
+
+  // ====================================================
+  // PRIORITY CLASS
+  // ====================================================
 
   const priorityClass = (
     priority: string
   ) => {
-    if (priority === "CRITICAL") {
+
+    if (
+      priority === "CRITICAL"
+    ) {
       return "red";
     }
 
-    if (priority === "HIGH") {
+    if (
+      priority === "HIGH"
+    ) {
       return "amber";
     }
 
     return "green";
   };
 
+
+  // ====================================================
+  // STATUS CLASS
+  // ====================================================
+
   const statusClass = (
     status: string
   ) => {
+
     if (
       status === "CANCELLED"
     ) {
@@ -330,31 +583,55 @@ export default function Requests() {
     return "amber";
   };
 
+
+  // ====================================================
+  // FORMAT DATE
+  // ====================================================
+
   const formatDate = (
     value: string
   ) => {
-    if (!value) return "-";
+
+    if (!value) {
+      return "-";
+    }
 
     return new Date(
       value
-    ).toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
+    ).toLocaleDateString(
+      "en-IN",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }
+    );
   };
 
-  return (
-    <section className="dashboard-page">
-      <div className="dashboard-inner">
 
-        {/* =====================================================
+  // ====================================================
+  // RENDER
+  // ====================================================
+
+  return (
+
+    <section
+      className="dashboard-page"
+    >
+
+      <div
+        className="dashboard-inner"
+      >
+
+
+        {/* ==========================================
             HEADER
-        ====================================================== */}
+        ========================================== */}
 
         <div className="dash-head">
 
           <div>
+
             <span className="eyebrow">
               SUPPLY CHAIN
             </span>
@@ -364,10 +641,13 @@ export default function Requests() {
             </h1>
 
             <p>
-              Create, prioritize and track
-              forward supply requirements.
+              Create, prioritize and
+              track forward supply
+              requirements.
             </p>
+
           </div>
+
 
           <div
             style={{
@@ -376,60 +656,88 @@ export default function Requests() {
               flexWrap: "wrap",
             }}
           >
+
             <button
               className="outline-btn"
-              onClick={loadRequests}
+              onClick={
+                loadRequests
+              }
               disabled={loading}
             >
+
               <RefreshCw
                 size={15}
                 className={
-                  loading ? "spin" : ""
+                  loading
+                    ? "spin"
+                    : ""
                 }
               />
 
               Refresh
+
             </button>
+
 
             <button
               className="primary-btn"
               onClick={() =>
-                setShowForm(!showForm)
+                setShowForm(
+                  !showForm
+                )
               }
             >
-              <Plus size={15} />
+
+              <Plus
+                size={15}
+              />
 
               New Request
+
             </button>
+
           </div>
 
         </div>
 
-        {/* =====================================================
+
+        {/* ==========================================
             ERROR
-        ====================================================== */}
+        ========================================== */}
 
         {error && (
+
           <div
             className="human-note"
             style={{
               marginBottom: 16,
-              borderColor: "#ef4444",
+              borderColor:
+                "#ef4444",
             }}
           >
+
             {error}
+
           </div>
+
         )}
 
-        {/* =====================================================
-            KPI
-        ====================================================== */}
+
+        {/* ==========================================
+            KPI CARDS
+        ========================================== */}
 
         <div className="stat-grid">
 
+
           <div className="stat-card">
+
             <div className="stat-icon">
-              <PackageCheck size={18} />
+
+              <PackageCheck
+                size={18}
+              />
+
             </div>
 
             <span>
@@ -443,11 +751,18 @@ export default function Requests() {
             <small>
               All supply requests
             </small>
+
           </div>
 
+
           <div className="stat-card">
+
             <div className="stat-icon">
-              <Send size={18} />
+
+              <Send
+                size={18}
+              />
+
             </div>
 
             <span>
@@ -461,11 +776,18 @@ export default function Requests() {
             <small>
               Awaiting planner action
             </small>
+
           </div>
 
+
           <div className="stat-card">
+
             <div className="stat-icon">
-              <Clock3 size={18} />
+
+              <Clock3
+                size={18}
+              />
+
             </div>
 
             <span>
@@ -479,11 +801,18 @@ export default function Requests() {
             <small>
               Highest priority
             </small>
+
           </div>
 
+
           <div className="stat-card">
+
             <div className="stat-icon">
-              <CheckCircle2 size={18} />
+
+              <CheckCircle2
+                size={18}
+              />
+
             </div>
 
             <span>
@@ -497,15 +826,18 @@ export default function Requests() {
             <small>
               Active fulfillment
             </small>
+
           </div>
 
         </div>
 
-        {/* =====================================================
+
+        {/* ==========================================
             CREATE REQUEST FORM
-        ====================================================== */}
+        ========================================== */}
 
         {showForm && (
+
           <div
             className="panel"
             style={{
@@ -514,20 +846,27 @@ export default function Requests() {
           >
 
             <div className="panel-head">
+
               <div>
+
                 <h3>
                   Create Supply Request
                 </h3>
 
                 <span>
-                  Submit a new forward supply
-                  requirement
+                  Submit a new forward
+                  supply requirement
                 </span>
+
               </div>
+
             </div>
 
+
             <form
-              onSubmit={createRequest}
+              onSubmit={
+                createRequest
+              }
               style={{
                 display: "grid",
                 gridTemplateColumns:
@@ -536,12 +875,15 @@ export default function Requests() {
               }}
             >
 
+
               {/* LOCATION */}
 
               <label>
+
                 <span
                   style={{
-                    display: "block",
+                    display:
+                      "block",
                     marginBottom: 7,
                     fontSize: 12,
                     fontWeight: 700,
@@ -551,7 +893,9 @@ export default function Requests() {
                 </span>
 
                 <select
-                  value={form.locationId}
+                  value={
+                    form.locationId
+                  }
                   onChange={(e) =>
                     setForm({
                       ...form,
@@ -561,30 +905,45 @@ export default function Requests() {
                   }
                   style={inputStyle}
                 >
+
                   <option value="">
                     Select location
                   </option>
 
                   {locations.map(
                     (location) => (
+
                       <option
-                        key={location.id}
-                        value={location.id}
+                        key={
+                          location.id
+                        }
+                        value={
+                          location.id
+                        }
                       >
-                        {location.code} —{" "}
+
+                        {location.code}
+                        {" — "}
                         {location.name}
+
                       </option>
+
                     )
                   )}
+
                 </select>
+
               </label>
+
 
               {/* ITEM */}
 
               <label>
+
                 <span
                   style={{
-                    display: "block",
+                    display:
+                      "block",
                     marginBottom: 7,
                     fontSize: 12,
                     fontWeight: 700,
@@ -594,7 +953,9 @@ export default function Requests() {
                 </span>
 
                 <select
-                  value={form.itemId}
+                  value={
+                    form.itemId
+                  }
                   onChange={(e) =>
                     setForm({
                       ...form,
@@ -604,28 +965,41 @@ export default function Requests() {
                   }
                   style={inputStyle}
                 >
+
                   <option value="">
                     Select item
                   </option>
 
-                  {items.map((item) => (
-                    <option
-                      key={item.id}
-                      value={item.id}
-                    >
-                      {item.name} —{" "}
-                      {item.category}
-                    </option>
-                  ))}
+                  {items.map(
+                    (item) => (
+
+                      <option
+                        key={item.id}
+                        value={item.id}
+                      >
+
+                        {item.name}
+                        {" — "}
+                        {item.category}
+
+                      </option>
+
+                    )
+                  )}
+
                 </select>
+
               </label>
+
 
               {/* QUANTITY */}
 
               <label>
+
                 <span
                   style={{
-                    display: "block",
+                    display:
+                      "block",
                     marginBottom: 7,
                     fontSize: 12,
                     fontWeight: 700,
@@ -638,7 +1012,9 @@ export default function Requests() {
                   type="number"
                   min="0.01"
                   step="0.01"
-                  value={form.quantity}
+                  value={
+                    form.quantity
+                  }
                   onChange={(e) =>
                     setForm({
                       ...form,
@@ -649,14 +1025,18 @@ export default function Requests() {
                   placeholder="Enter quantity"
                   style={inputStyle}
                 />
+
               </label>
+
 
               {/* REQUIRED BY */}
 
               <label>
+
                 <span
                   style={{
-                    display: "block",
+                    display:
+                      "block",
                     marginBottom: 7,
                     fontSize: 12,
                     fontWeight: 700,
@@ -667,7 +1047,9 @@ export default function Requests() {
 
                 <input
                   type="date"
-                  value={form.requiredBy}
+                  value={
+                    form.requiredBy
+                  }
                   onChange={(e) =>
                     setForm({
                       ...form,
@@ -677,14 +1059,18 @@ export default function Requests() {
                   }
                   style={inputStyle}
                 />
+
               </label>
+
 
               {/* PRIORITY */}
 
               <label>
+
                 <span
                   style={{
-                    display: "block",
+                    display:
+                      "block",
                     marginBottom: 7,
                     fontSize: 12,
                     fontWeight: 700,
@@ -694,7 +1080,9 @@ export default function Requests() {
                 </span>
 
                 <select
-                  value={form.priority}
+                  value={
+                    form.priority
+                  }
                   onChange={(e) =>
                     setForm({
                       ...form,
@@ -704,6 +1092,7 @@ export default function Requests() {
                   }
                   style={inputStyle}
                 >
+
                   <option value="LOW">
                     LOW
                   </option>
@@ -719,15 +1108,20 @@ export default function Requests() {
                   <option value="CRITICAL">
                     CRITICAL
                   </option>
+
                 </select>
+
               </label>
+
 
               {/* REASON */}
 
               <label>
+
                 <span
                   style={{
-                    display: "block",
+                    display:
+                      "block",
                     marginBottom: 7,
                     fontSize: 12,
                     fontWeight: 700,
@@ -738,7 +1132,9 @@ export default function Requests() {
 
                 <input
                   type="text"
-                  value={form.reason}
+                  value={
+                    form.reason
+                  }
                   onChange={(e) =>
                     setForm({
                       ...form,
@@ -749,7 +1145,9 @@ export default function Requests() {
                   placeholder="Why is this supply required?"
                   style={inputStyle}
                 />
+
               </label>
+
 
               {/* ACTIONS */}
 
@@ -757,9 +1155,13 @@ export default function Requests() {
                 style={{
                   gridColumn:
                     "1 / -1",
-                  display: "flex",
+
+                  display:
+                    "flex",
+
                   justifyContent:
                     "flex-end",
+
                   gap: 8,
                 }}
               >
@@ -774,33 +1176,42 @@ export default function Requests() {
                   Cancel
                 </button>
 
+
                 <button
                   type="submit"
                   className="primary-btn"
                   disabled={creating}
                 >
-                  <Send size={15} />
+
+                  <Send
+                    size={15}
+                  />
 
                   {creating
                     ? "Submitting..."
                     : "Submit Request"}
+
                 </button>
 
               </div>
 
             </form>
+
           </div>
+
         )}
 
-        {/* =====================================================
-            REQUEST TABLE
-        ====================================================== */}
+
+        {/* ==========================================
+            REQUEST QUEUE
+        ========================================== */}
 
         <div className="panel">
 
           <div className="panel-head">
 
             <div>
+
               <h3>
                 Supply Request Queue
               </h3>
@@ -809,29 +1220,38 @@ export default function Requests() {
                 Prioritized logistics
                 requirements
               </span>
+
             </div>
+
 
             {/* FILTERS */}
 
             <div
               style={{
-                display: "flex",
+                display:
+                  "flex",
+
                 gap: 8,
-                flexWrap: "wrap",
+
+                flexWrap:
+                  "wrap",
               }}
             >
 
               <select
-                value={priorityFilter}
+                value={
+                  priorityFilter
+                }
                 onChange={(e) =>
                   setPriorityFilter(
                     e.target.value
                   )
                 }
-                style={{
-                  ...smallSelectStyle,
-                }}
+                style={
+                  smallSelectStyle
+                }
               >
+
                 <option value="ALL">
                   All Priorities
                 </option>
@@ -851,61 +1271,84 @@ export default function Requests() {
                 <option value="LOW">
                   Low
                 </option>
+
               </select>
 
+
               <select
-                value={statusFilter}
+                value={
+                  statusFilter
+                }
                 onChange={(e) =>
                   setStatusFilter(
                     e.target.value
                   )
                 }
-                style={{
-                  ...smallSelectStyle,
-                }}
+                style={
+                  smallSelectStyle
+                }
               >
+
                 <option value="ALL">
                   All Status
                 </option>
 
                 {STATUS_OPTIONS.map(
                   (status) => (
+
                     <option
                       key={status}
                       value={status}
                     >
                       {status}
                     </option>
+
                   )
                 )}
+
               </select>
 
             </div>
 
           </div>
 
+
+          {/* LOADING */}
+
           {loading ? (
+
             <div
               style={{
-                padding: "45px 20px",
-                textAlign: "center",
-                color: "var(--muted)",
+                padding:
+                  "45px 20px",
+
+                textAlign:
+                  "center",
+
+                color:
+                  "var(--muted)",
               }}
             >
               Loading supply requests...
             </div>
-          ) : filteredRequests.length ===
-            0 ? (
+
+          ) : filteredRequests.length === 0 ? (
+
             <div
               style={{
-                padding: "55px 20px",
-                textAlign: "center",
+                padding:
+                  "55px 20px",
+
+                textAlign:
+                  "center",
               }}
             >
+
               <PackageCheck
                 size={38}
                 style={{
-                  opacity: 0.6,
+                  opacity:
+                    0.6,
                 }}
               />
 
@@ -919,26 +1362,38 @@ export default function Requests() {
                     "var(--muted)",
                 }}
               >
-                Create a new request or
-                change the filters.
+                Create a new request
+                or change the filters.
               </p>
+
             </div>
+
           ) : (
+
             <div
               style={{
-                overflowX: "auto",
+                overflowX:
+                  "auto",
               }}
             >
+
               <table
                 style={{
-                  width: "100%",
+                  width:
+                    "100%",
+
                   borderCollapse:
                     "collapse",
-                  minWidth: 1050,
+
+                  minWidth:
+                    1050,
                 }}
               >
+
                 <thead>
+
                   <tr>
+
                     {[
                       "Request",
                       "Location",
@@ -948,25 +1403,45 @@ export default function Requests() {
                       "Priority",
                       "Status",
                       "Action",
-                    ].map((heading) => (
-                      <th
-                        key={heading}
-                        style={thStyle}
-                      >
-                        {heading}
-                      </th>
-                    ))}
+                    ].map(
+                      (heading) => (
+
+                        <th
+                          key={heading}
+                          style={
+                            thStyle
+                          }
+                        >
+                          {heading}
+                        </th>
+
+                      )
+                    )}
+
                   </tr>
+
                 </thead>
 
+
                 <tbody>
+
                   {filteredRequests.map(
                     (request) => (
+
                       <tr
-                        key={request.id}
+                        key={
+                          request.id
+                        }
                       >
 
-                        <td style={tdStyle}>
+                        {/* REQUEST */}
+
+                        <td
+                          style={
+                            tdStyle
+                          }
+                        >
+
                           <b>
                             {
                               request.request_code
@@ -975,19 +1450,32 @@ export default function Requests() {
 
                           <div
                             style={{
-                              fontSize: 11,
+                              fontSize:
+                                11,
+
                               color:
                                 "var(--muted)",
-                              marginTop: 4,
+
+                              marginTop:
+                                4,
                             }}
                           >
                             {formatDate(
                               request.created_at
                             )}
                           </div>
+
                         </td>
 
-                        <td style={tdStyle}>
+
+                        {/* LOCATION */}
+
+                        <td
+                          style={
+                            tdStyle
+                          }
+                        >
+
                           <b>
                             {
                               request.location_code
@@ -996,19 +1484,32 @@ export default function Requests() {
 
                           <div
                             style={{
-                              fontSize: 11,
+                              fontSize:
+                                11,
+
                               color:
                                 "var(--muted)",
-                              marginTop: 3,
+
+                              marginTop:
+                                3,
                             }}
                           >
                             {
                               request.location_name
                             }
                           </div>
+
                         </td>
 
-                        <td style={tdStyle}>
+
+                        {/* ITEM */}
+
+                        <td
+                          style={
+                            tdStyle
+                          }
+                        >
+
                           <b>
                             {
                               request.item_name
@@ -1017,19 +1518,31 @@ export default function Requests() {
 
                           <div
                             style={{
-                              fontSize: 11,
+                              fontSize:
+                                11,
+
                               color:
                                 "var(--muted)",
-                              marginTop: 3,
+
+                              marginTop:
+                                3,
                             }}
                           >
                             {
                               request.category
                             }
                           </div>
+
                         </td>
 
-                        <td style={tdStyle}>
+
+                        {/* QUANTITY */}
+
+                        <td
+                          style={
+                            tdStyle
+                          }
+                        >
                           {Number(
                             request.quantity
                           ).toLocaleString(
@@ -1037,64 +1550,122 @@ export default function Requests() {
                           )}
                         </td>
 
-                        <td style={tdStyle}>
+
+                        {/* REQUIRED BY */}
+
+                        <td
+                          style={
+                            tdStyle
+                          }
+                        >
                           {formatDate(
                             request.required_by
                           )}
                         </td>
 
-                        <td style={tdStyle}>
+
+                        {/* PRIORITY */}
+
+                        <td
+                          style={
+                            tdStyle
+                          }
+                        >
+
                           <span
-                            className={`inventory-status ${priorityClass(
-                              request.priority
-                            )}`}
+                            className={
+                              `inventory-status ${priorityClass(
+                                request.priority
+                              )}`
+                            }
                           >
                             {
                               request.priority
                             }
                           </span>
+
                         </td>
 
-                        <td style={tdStyle}>
+
+                        {/* STATUS */}
+
+                        <td
+                          style={
+                            tdStyle
+                          }
+                        >
+
                           <span
-                            className={`inventory-status ${statusClass(
-                              request.status
-                            )}`}
+                            className={
+                              `inventory-status ${statusClass(
+                                request.status
+                              )}`
+                            }
                           >
                             {
                               request.status
                             }
                           </span>
+
                         </td>
 
-                        <td style={tdStyle}>
+
+                        {/* ACTION */}
+
+                        <td
+                          style={
+                            tdStyle
+                          }
+                        >
 
                           {request.status !==
                             "CLOSED" &&
                             request.status !==
                               "CANCELLED" && (
+
                               <select
                                 value={
                                   request.status
                                 }
+
                                 disabled={
                                   updating ===
                                   request.id
                                 }
-                                onChange={(e) =>
+
+                                onChange={(
+                                  e
+                                ) =>
                                   updateStatus(
                                     request.id,
                                     e.target
                                       .value
                                   )
                                 }
+
                                 style={{
                                   ...smallSelectStyle,
-                                  minWidth: 145,
+                                  minWidth:
+                                    160,
                                 }}
                               >
-                                {STATUS_OPTIONS.map(
+
+                                <option
+                                  value={
+                                    request.status
+                                  }
+                                >
+                                  {
+                                    request.status
+                                  }
+                                </option>
+
+
+                                {getNextStatuses(
+                                  request.status
+                                ).map(
                                   (status) => (
+
                                     <option
                                       key={
                                         status
@@ -1105,84 +1676,148 @@ export default function Requests() {
                                     >
                                       {status}
                                     </option>
+
                                   )
                                 )}
+
                               </select>
+
                             )}
 
                         </td>
 
                       </tr>
+
                     )
                   )}
+
                 </tbody>
+
               </table>
+
             </div>
+
           )}
 
         </div>
 
-        {/* =====================================================
-            EXPLAINABILITY
-        ====================================================== */}
 
-        <div className="human-note">
+        {/* ==========================================
+            HUMAN REVIEW
+        ========================================== */}
+
+        <div
+          className="human-note"
+        >
+
           <b>
             Supply workflow:
           </b>{" "}
-          Requests are submitted with a
-          required-by date, priority and
-          operational reason. Planners can
-          review the queue and move requests
-          through planning, approval,
-          transit and delivery stages.
+
+          Requests are submitted with
+          a required-by date, priority
+          and operational reason.
+          Planners can review the queue
+          and move requests through
+          planning, approval, transit
+          and delivery stages.
+
         </div>
 
       </div>
+
     </section>
   );
 }
 
-/* =========================================================
-   INLINE STYLES
-========================================================= */
 
-const inputStyle: React.CSSProperties = {
+// ======================================================
+// STYLES
+// ======================================================
+
+const inputStyle:
+  React.CSSProperties = {
+
   width: "100%",
-  padding: "10px 12px",
+
+  padding:
+    "10px 12px",
+
   borderRadius: 8,
-  border: "1px solid var(--line)",
-  background: "var(--surface)",
-  color: "var(--text)",
+
+  border:
+    "1px solid var(--line)",
+
+  background:
+    "var(--surface)",
+
+  color:
+    "var(--text)",
+
   outline: "none",
+
   fontSize: 13,
 };
 
-const smallSelectStyle: React.CSSProperties = {
-  padding: "8px 10px",
+
+const smallSelectStyle:
+  React.CSSProperties = {
+
+  padding:
+    "8px 10px",
+
   borderRadius: 8,
-  border: "1px solid var(--line)",
-  background: "var(--surface)",
-  color: "var(--text)",
+
+  border:
+    "1px solid var(--line)",
+
+  background:
+    "var(--surface)",
+
+  color:
+    "var(--text)",
+
   outline: "none",
+
   fontSize: 12,
 };
 
-const thStyle: React.CSSProperties = {
+
+const thStyle:
+  React.CSSProperties = {
+
   textAlign: "left",
-  padding: "11px 10px",
+
+  padding:
+    "11px 10px",
+
   borderBottom:
     "1px solid var(--line)",
-  color: "var(--muted)",
+
+  color:
+    "var(--muted)",
+
   fontSize: 11,
-  textTransform: "uppercase",
-  letterSpacing: "0.05em",
+
+  textTransform:
+    "uppercase",
+
+  letterSpacing:
+    "0.05em",
 };
 
-const tdStyle: React.CSSProperties = {
-  padding: "13px 10px",
+
+const tdStyle:
+  React.CSSProperties = {
+
+  padding:
+    "13px 10px",
+
   borderBottom:
     "1px solid var(--line)",
+
   fontSize: 13,
-  verticalAlign: "top",
+
+  verticalAlign:
+    "top",
 };

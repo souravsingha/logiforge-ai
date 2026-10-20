@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+
 import { ThemeProvider } from "./components/ThemeProvider";
 import DashboardLayout from "./components/DashboardLayout";
 
@@ -16,34 +22,27 @@ import Optimization from "./pages/Optimization";
 import Scenarios from "./pages/Scenarios";
 import Analytics from "./pages/Analytics";
 import Assistant from "./pages/Assistant";
-import Placeholder from "./pages/Placeholder";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
         <Routes>
-
           {/* =========================
               PUBLIC PAGES
           ========================= */}
 
-          <Route
-            path="/"
-            element={<Home />}
-          />
+          <Route path="/" element={<Home />} />
 
-          <Route
-            path="/login"
-            element={<Login />}
-          />
+          <Route path="/login" element={<Login />} />
 
           {/* =========================
               PROTECTED COMMAND CENTER
           ========================= */}
 
           <Route element={<DashboardLayout />}>
-
             {/* Dashboard */}
             <Route
               path="/dashboard"
@@ -116,12 +115,17 @@ export default function App() {
               element={<Assistant />}
             />
 
-            {/* Settings */}
+            {/* My Profile */}
             <Route
-              path="/settings"
-              element={<Placeholder title="Settings" />}
+              path="/profile"
+              element={<Profile />}
             />
 
+            {/* System Settings */}
+            <Route
+              path="/settings"
+              element={<Settings />}
+            />
           </Route>
 
           {/* =========================
@@ -132,7 +136,6 @@ export default function App() {
             path="*"
             element={<Navigate to="/" replace />}
           />
-
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

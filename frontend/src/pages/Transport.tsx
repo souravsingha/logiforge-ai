@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
+import type { CSSProperties, ReactNode } from "react";
+
 import {
   Activity,
   CheckCircle2,
   MapPinned,
   RefreshCw,
   Truck,
-  XCircle,
 } from "lucide-react";
+
 import api from "../lib/api";
+import LogisticsMap from "../components/logistics/LogisticsMap";
 
 type TransportAsset = {
   id: string;
@@ -38,46 +41,63 @@ type TransportRoute = {
   is_available: boolean;
 };
 
-export default function Transport() {
-  const [assets, setAssets] = useState<
-    TransportAsset[]
-  >([]);
+type MapLocation = {
+  id: string;
+  code: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+};
 
-  const [routes, setRoutes] = useState<
-    TransportRoute[]
-  >([]);
+export default function Transport() {
+  const [assets, setAssets] = useState<TransportAsset[]>([]);
+  const [routes, setRoutes] = useState<TransportRoute[]>([]);
+  const [locations, setLocations] = useState<MapLocation[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [assetFilter, setAssetFilter] =
-    useState("ALL");
+  const [assetFilter, setAssetFilter] = useState("ALL");
+  const [routeFilter, setRouteFilter] = useState("ALL");
 
-  const [routeFilter, setRouteFilter] =
-    useState("ALL");
+  // =========================================================
+  // LOAD TRANSPORT DATA
+  // =========================================================
 
   const loadTransport = async () => {
     try {
       setLoading(true);
       setError("");
 
-      const [assetsResponse, routesResponse] =
-        await Promise.all([
-          api.get("/transport/assets"),
-          api.get("/transport/routes"),
-        ]);
+      const [
+        assetsResponse,
+        routesResponse,
+        locationsResponse,
+      ] = await Promise.all([
+        api.get("/transport/assets"),
+        api.get("/transport/routes"),
+        api.get("/locations"),
+      ]);
 
-      setAssets(
-        assetsResponse.data?.data || []
-      );
+      setAssets(assetsResponse.data?.data || []);
 
-      setRoutes(
-        routesResponse.data?.data || []
+      setRoutes(routesResponse.data?.data || []);
+
+      setLocations(
+        (locationsResponse.data?.data || []).map(
+          (location: any) => ({
+            id: location.id,
+            code: location.code,
+            name: location.name,
+            latitude: Number(location.latitude),
+            longitude: Number(location.longitude),
+          }),
+        ),
       );
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||
-          "Unable to load transport data."
+          "Unable to load transport data.",
       );
     } finally {
       setLoading(false);
@@ -88,43 +108,57 @@ export default function Transport() {
     loadTransport();
   }, []);
 
-  const assetStats = useMemo(() => {
-    return {
+  // =========================================================
+  // ASSET STATS
+  // =========================================================
+
+  const assetStats = useMemo(
+    () => ({
       total: assets.length,
 
       available: assets.filter(
-        (a) => a.status === "AVAILABLE"
+        (asset) => asset.status === "AVAILABLE",
       ).length,
 
       transit: assets.filter(
-        (a) => a.status === "IN_TRANSIT"
+        (asset) => asset.status === "IN_TRANSIT",
       ).length,
 
       maintenance: assets.filter(
-        (a) => a.status === "MAINTENANCE"
+        (asset) => asset.status === "MAINTENANCE",
       ).length,
-    };
-  }, [assets]);
+    }),
+    [assets],
+  );
 
-  const routeStats = useMemo(() => {
-    return {
+  // =========================================================
+  // ROUTE STATS
+  // =========================================================
+
+  const routeStats = useMemo(
+    () => ({
       total: routes.length,
 
       available: routes.filter(
-        (r) => r.is_available
+        (route) => route.is_available,
       ).length,
 
       unavailable: routes.filter(
-        (r) => !r.is_available
+        (route) => !route.is_available,
       ).length,
 
       disrupted: routes.filter(
-        (r) =>
-          r.weather_impact !== "LOW" ||
-          r.road_condition !== "NORMAL"
+        (route) =>
+          route.weather_impact !== "LOW" ||
+          route.road_condition !== "NORMAL",
       ).length,
-    };
-  }, [routes]);
+    }),
+    [routes],
+  );
+
+  // =========================================================
+  // FILTER ASSETS
+  // =========================================================
 
   const filteredAssets = useMemo(() => {
     if (assetFilter === "ALL") {
@@ -132,10 +166,13 @@ export default function Transport() {
     }
 
     return assets.filter(
-      (asset) =>
-        asset.status === assetFilter
+      (asset) => asset.status === assetFilter,
     );
   }, [assets, assetFilter]);
+
+  // =========================================================
+  // FILTER ROUTES
+  // =========================================================
 
   const filteredRoutes = useMemo(() => {
     if (routeFilter === "ALL") {
@@ -144,32 +181,32 @@ export default function Transport() {
 
     if (routeFilter === "AVAILABLE") {
       return routes.filter(
-        (route) => route.is_available
+        (route) => route.is_available,
       );
     }
 
     if (routeFilter === "UNAVAILABLE") {
       return routes.filter(
-        (route) => !route.is_available
+        (route) => !route.is_available,
       );
     }
 
     if (routeFilter === "DISRUPTED") {
       return routes.filter(
         (route) =>
-          route.weather_impact !==
-            "LOW" ||
-          route.road_condition !==
-            "NORMAL"
+          route.weather_impact !== "LOW" ||
+          route.road_condition !== "NORMAL",
       );
     }
 
     return routes;
   }, [routes, routeFilter]);
 
-  const assetStatusClass = (
-    status: string
-  ) => {
+  // =========================================================
+  // ASSET STATUS
+  // =========================================================
+
+  const assetStatusClass = (status: string) => {
     if (status === "AVAILABLE") {
       return "green";
     }
@@ -184,18 +221,20 @@ export default function Transport() {
     return "red";
   };
 
+  // =========================================================
+  // ROUTE STATUS
+  // =========================================================
+
   const routeStatusClass = (
-    route: TransportRoute
+    route: TransportRoute,
   ) => {
     if (!route.is_available) {
       return "red";
     }
 
     if (
-      route.weather_impact !==
-        "LOW" ||
-      route.road_condition !==
-        "NORMAL"
+      route.weather_impact !== "LOW" ||
+      route.road_condition !== "NORMAL"
     ) {
       return "amber";
     }
@@ -203,16 +242,24 @@ export default function Transport() {
     return "green";
   };
 
+  // =========================================================
+  // NUMBER FORMATTER
+  // =========================================================
+
   const formatNumber = (
-    value: number | string
+    value: number | string,
   ) => {
     return Number(value).toLocaleString(
       "en-IN",
       {
         maximumFractionDigits: 2,
-      }
+      },
     );
   };
+
+  // =========================================================
+  // UI
+  // =========================================================
 
   return (
     <section className="dashboard-page">
@@ -223,7 +270,6 @@ export default function Transport() {
         ====================================================== */}
 
         <div className="dash-head">
-
           <div>
             <span className="eyebrow">
               TRANSPORT & MOBILITY
@@ -254,7 +300,6 @@ export default function Transport() {
 
             Refresh
           </button>
-
         </div>
 
         {/* =====================================================
@@ -367,8 +412,7 @@ export default function Transport() {
               </h3>
 
               <span>
-                Vehicle availability and
-                capacity
+                Vehicle availability and capacity
               </span>
             </div>
 
@@ -376,7 +420,7 @@ export default function Transport() {
               value={assetFilter}
               onChange={(e) =>
                 setAssetFilter(
-                  e.target.value
+                  e.target.value,
                 )
               }
               style={selectStyle}
@@ -412,7 +456,9 @@ export default function Transport() {
             <Loading />
           ) : filteredAssets.length === 0 ? (
             <EmptyState
-              icon={<Truck size={36} />}
+              icon={
+                <Truck size={36} />
+              }
               title="No transport assets"
               message="No assets match the selected filter."
             />
@@ -422,9 +468,12 @@ export default function Transport() {
                 overflowX: "auto",
               }}
             >
+
               <table style={tableStyle}>
+
                 <thead>
                   <tr>
+
                     <th style={thStyle}>
                       Vehicle
                     </th>
@@ -448,13 +497,17 @@ export default function Transport() {
                     <th style={thStyle}>
                       Updated
                     </th>
+
                   </tr>
                 </thead>
 
                 <tbody>
+
                   {filteredAssets.map(
                     (asset) => (
-                      <tr key={asset.id}>
+                      <tr
+                        key={asset.id}
+                      >
 
                         <td style={tdStyle}>
                           <b>
@@ -472,7 +525,7 @@ export default function Transport() {
 
                         <td style={tdStyle}>
                           {formatNumber(
-                            asset.capacity
+                            asset.capacity,
                           )}{" "}
                           {
                             asset.capacity_unit
@@ -480,23 +533,27 @@ export default function Transport() {
                         </td>
 
                         <td style={tdStyle}>
+
                           <span
                             className={`inventory-status ${assetStatusClass(
-                              asset.status
+                              asset.status,
                             )}`}
                           >
                             {
                               asset.status
                             }
                           </span>
+
                         </td>
 
                         <td style={tdStyle}>
+
                           <div
                             style={{
                               minWidth: 110,
                             }}
                           >
+
                             <div
                               style={{
                                 display:
@@ -507,14 +564,16 @@ export default function Transport() {
                                 fontSize: 11,
                               }}
                             >
+
                               <span>
                                 {
                                   formatNumber(
-                                    asset.availability_percent
+                                    asset.availability_percent,
                                   )
                                 }
                                 %
                               </span>
+
                             </div>
 
                             <div
@@ -527,6 +586,7 @@ export default function Transport() {
                                   "hidden",
                               }}
                             >
+
                               <div
                                 style={{
                                   width: `${Math.min(
@@ -534,9 +594,9 @@ export default function Transport() {
                                     Math.max(
                                       0,
                                       Number(
-                                        asset.availability_percent
-                                      )
-                                    )
+                                        asset.availability_percent,
+                                      ),
+                                    ),
                                   )}%`,
                                   height:
                                     "100%",
@@ -544,13 +604,17 @@ export default function Transport() {
                                     "var(--accent)",
                                 }}
                               />
+
                             </div>
+
                           </div>
+
                         </td>
 
                         <td style={tdStyle}>
+
                           {new Date(
-                            asset.updated_at
+                            asset.updated_at,
                           ).toLocaleString(
                             "en-IN",
                             {
@@ -558,16 +622,90 @@ export default function Transport() {
                                 "medium",
                               timeStyle:
                                 "short",
-                            }
+                            },
                           )}
+
                         </td>
 
                       </tr>
-                    )
+                    ),
                   )}
+
                 </tbody>
+
               </table>
+
             </div>
+          )}
+
+        </div>
+
+        {/* =====================================================
+            GIS PLANNING MAP
+        ====================================================== */}
+
+        <div className="panel">
+
+          <div className="panel-head">
+
+            <div>
+              <h3>
+                Logistics Network Map
+              </h3>
+
+              <span>
+                Synthetic GIS planning visualization
+              </span>
+            </div>
+
+          </div>
+
+          {loading ? (
+            <Loading />
+          ) : locations.length === 0 ? (
+            <EmptyState
+              icon={
+                <MapPinned size={36} />
+              }
+              title="No locations available"
+              message="No active planning locations are available for map visualization."
+            />
+          ) : (
+            <LogisticsMap
+              locations={locations.map(
+                (location) => ({
+                  id: location.id,
+                  code: location.code,
+                  name: location.name,
+                  lat: location.latitude,
+                  lng: location.longitude,
+                }),
+              )}
+
+              routes={routes.map(
+                (route) => ({
+                  id: route.id,
+                  route_code:
+                    route.route_code,
+                  from_code:
+                    route.from_code || "",
+                  to_code:
+                    route.to_code || "",
+                  distance_km:
+                    route.distance_km,
+                  estimated_time_hours:
+                    route.estimated_time_hours,
+                  road_condition:
+                    route.road_condition,
+                  weather_impact:
+                    route.weather_impact,
+                  availability_percent:
+                    route.availability_percent,
+                  is_available:
+                    route.is_available,
+                }),
+              )}
+            />
           )}
 
         </div>
@@ -581,6 +719,7 @@ export default function Transport() {
           <div className="panel-head">
 
             <div>
+
               <h3>
                 Route Network
               </h3>
@@ -589,17 +728,19 @@ export default function Transport() {
                 Synthetic logistics network
                 for planning
               </span>
+
             </div>
 
             <select
               value={routeFilter}
               onChange={(e) =>
                 setRouteFilter(
-                  e.target.value
+                  e.target.value,
                 )
               }
               style={selectStyle}
             >
+
               <option value="ALL">
                 All Routes
               </option>
@@ -615,14 +756,14 @@ export default function Transport() {
               <option value="DISRUPTED">
                 Disrupted
               </option>
+
             </select>
 
           </div>
 
           {loading ? (
             <Loading />
-          ) : filteredRoutes.length ===
-            0 ? (
+          ) : filteredRoutes.length === 0 ? (
             <EmptyState
               icon={
                 <MapPinned size={36} />
@@ -636,9 +777,13 @@ export default function Transport() {
                 overflowX: "auto",
               }}
             >
+
               <table style={tableStyle}>
+
                 <thead>
+
                   <tr>
+
                     <th style={thStyle}>
                       Route
                     </th>
@@ -670,15 +815,21 @@ export default function Transport() {
                     <th style={thStyle}>
                       Availability
                     </th>
+
                   </tr>
+
                 </thead>
 
                 <tbody>
+
                   {filteredRoutes.map(
                     (route) => (
-                      <tr key={route.id}>
+                      <tr
+                        key={route.id}
+                      >
 
                         <td style={tdStyle}>
+
                           <b>
                             {
                               route.route_code
@@ -690,19 +841,25 @@ export default function Transport() {
                               marginTop: 5,
                             }}
                           >
+
                             <span
                               className={`inventory-status ${routeStatusClass(
-                                route
+                                route,
                               )}`}
                             >
+
                               {route.is_available
                                 ? "AVAILABLE"
                                 : "UNAVAILABLE"}
+
                             </span>
+
                           </div>
+
                         </td>
 
                         <td style={tdStyle}>
+
                           <b>
                             {
                               route.from_code
@@ -725,29 +882,37 @@ export default function Transport() {
                               route.to_code
                             }
                           </b>
+
                         </td>
 
                         <td style={tdStyle}>
+
                           {formatNumber(
-                            route.distance_km
+                            route.distance_km,
                           )}{" "}
                           km
+
                         </td>
 
                         <td style={tdStyle}>
+
                           {formatNumber(
-                            route.estimated_time_hours
+                            route.estimated_time_hours,
                           )}{" "}
                           hrs
+
                         </td>
 
                         <td style={tdStyle}>
+
                           {formatNumber(
-                            route.capacity
+                            route.capacity,
                           )}
+
                         </td>
 
                         <td style={tdStyle}>
+
                           <span
                             className={`inventory-status ${
                               route.road_condition ===
@@ -756,13 +921,17 @@ export default function Transport() {
                                 : "amber"
                             }`}
                           >
+
                             {
                               route.road_condition
                             }
+
                           </span>
+
                         </td>
 
                         <td style={tdStyle}>
+
                           <span
                             className={`inventory-status ${
                               route.weather_impact ===
@@ -771,24 +940,32 @@ export default function Transport() {
                                 : "amber"
                             }`}
                           >
+
                             {
                               route.weather_impact
                             }
+
                           </span>
+
                         </td>
 
                         <td style={tdStyle}>
+
                           {formatNumber(
-                            route.availability_percent
+                            route.availability_percent,
                           )}
                           %
+
                         </td>
 
                       </tr>
-                    )
+                    ),
                   )}
+
                 </tbody>
+
               </table>
+
             </div>
           )}
 
@@ -799,15 +976,18 @@ export default function Transport() {
         ====================================================== */}
 
         <div className="human-note">
+
           <b>
             Planning note:
           </b>{" "}
+
           Route and transport information is
           presented as a synthetic planning
           network. Distance, travel time,
           capacity, road condition and weather
           impact can be used by downstream
           optimization and scenario modules.
+
         </div>
 
       </div>
@@ -816,7 +996,7 @@ export default function Transport() {
 }
 
 /* =========================================================
-   HELPERS
+   LOADING
 ========================================================= */
 
 function Loading() {
@@ -833,12 +1013,16 @@ function Loading() {
   );
 }
 
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
 function EmptyState({
   icon,
   title,
   message,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   message: string;
 }) {
@@ -849,6 +1033,7 @@ function EmptyState({
         textAlign: "center",
       }}
     >
+
       <div
         style={{
           opacity: 0.6,
@@ -868,6 +1053,7 @@ function EmptyState({
       >
         {message}
       </p>
+
     </div>
   );
 }
@@ -876,7 +1062,7 @@ function EmptyState({
    STYLES
 ========================================================= */
 
-const selectStyle: React.CSSProperties = {
+const selectStyle: CSSProperties = {
   padding: "8px 10px",
   borderRadius: 8,
   border: "1px solid var(--line)",
@@ -886,13 +1072,13 @@ const selectStyle: React.CSSProperties = {
   fontSize: 12,
 };
 
-const tableStyle: React.CSSProperties = {
+const tableStyle: CSSProperties = {
   width: "100%",
   borderCollapse: "collapse",
   minWidth: 950,
 };
 
-const thStyle: React.CSSProperties = {
+const thStyle: CSSProperties = {
   textAlign: "left",
   padding: "11px 10px",
   borderBottom: "1px solid var(--line)",
@@ -902,7 +1088,7 @@ const thStyle: React.CSSProperties = {
   letterSpacing: "0.05em",
 };
 
-const tdStyle: React.CSSProperties = {
+const tdStyle: CSSProperties = {
   padding: "13px 10px",
   borderBottom: "1px solid var(--line)",
   fontSize: 13,

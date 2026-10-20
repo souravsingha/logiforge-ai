@@ -1,0 +1,685 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap");
+
+.lf-login-page {
+  --lf-ink: #06141a;
+  --lf-deep: #0a2a33;
+  --lf-teal: #0f6b78;
+  --lf-teal-hi: #14899a;
+  --lf-mint: #5eead4;
+  --lf-paper: #f7f9f8;
+  --lf-text: #13262c;
+  --lf-muted: #5b6f75;
+  --lf-line: #d5dfe0;
+
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      120% 90% at 20% 10%,
+      #0d3640 0%,
+      var(--lf-ink) 60%
+    );
+
+  color: var(--lf-text);
+
+  font-family:
+    "Figtree",
+    "Segoe UI",
+    system-ui,
+    sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+.lf-login-page *,
+.lf-login-page *::before,
+.lf-login-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================
+   BACKGROUND CANVAS
+========================= */
+
+.lf-login-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* =========================
+   LOGIN CARD
+========================= */
+
+.lf-login-card {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 420px;
+
+  padding: 36px 34px 28px;
+
+  background: var(--lf-paper);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 30px 70px -20px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* =========================
+   BRAND
+========================= */
+
+.lf-login-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.lf-login-brand-icon {
+  width: 40px;
+  height: 40px;
+  flex: none;
+}
+
+.lf-login-brand-icon svg {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.lf-login-brand-name {
+  display: block;
+
+  color: var(--lf-deep);
+
+  font-family:
+    "Bricolage Grotesque",
+    "Segoe UI",
+    system-ui,
+    sans-serif;
+
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.lf-login-brand-name span {
+  margin-left: 4px;
+  color: var(--lf-teal-hi);
+}
+
+.lf-login-brand-subtitle {
+  display: block;
+  margin-top: 5px;
+
+  color: var(--lf-muted);
+
+  font-size: 12.5px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+/* =========================
+   HEADING
+========================= */
+
+.lf-login-heading h1 {
+  margin: 0 0 6px;
+
+  color: var(--lf-deep);
+
+  font-family:
+    "Bricolage Grotesque",
+    "Segoe UI",
+    system-ui,
+    sans-serif;
+
+  font-size: 28px;
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.lf-login-heading p {
+  margin: 0 0 22px;
+
+  color: var(--lf-muted);
+
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+.lf-login-message {
+  margin-bottom: 14px;
+
+  padding: 10px 12px;
+
+  border-radius: 10px;
+
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.lf-login-message.error {
+  background: #fdf0e7;
+  color: #9a3412;
+}
+
+.lf-login-message.success {
+  background: #e6f7f2;
+  color: #0b5b46;
+}
+
+/* =========================
+   LOGIN MODE SWITCH
+========================= */
+
+.lf-login-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+
+  padding: 4px;
+  margin-bottom: 20px;
+
+  background: #e9eeee;
+
+  border-radius: 10px;
+}
+
+.lf-login-mode button {
+  height: 38px;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #718187;
+
+  font-family: "Figtree", sans-serif;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.lf-login-mode button:hover {
+  color: var(--lf-deep);
+}
+
+.lf-login-mode button.active {
+  background: #fff;
+  color: var(--lf-teal);
+
+  box-shadow:
+    0 2px 8px rgba(6, 20, 26, 0.1);
+}
+
+/* =========================
+   FORM
+========================= */
+
+.lf-login-form {
+  display: grid;
+  gap: 17px;
+}
+
+.lf-login-field {
+  min-width: 0;
+}
+
+.lf-login-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--lf-text);
+
+  font-size: 13.5px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+/* =========================
+   INPUT CONTAINER
+========================= */
+
+.lf-login-input {
+  width: 100%;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 0 14px;
+
+  background: #fff;
+
+  border: 1.5px solid var(--lf-line);
+  border-radius: 10px;
+
+  color: #718187;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/*
+  IMPORTANT:
+  Input focus effect is handled here.
+  No extra outline/rectangle is added.
+*/
+
+.lf-login-input:focus-within {
+  border-color: var(--lf-teal);
+
+  box-shadow:
+    0 0 0 4px rgba(15, 107, 120, 0.15);
+}
+
+.lf-login-input svg {
+  flex: none;
+  color: #718187;
+}
+
+/* =========================
+   ACTUAL INPUT
+========================= */
+
+.lf-login-input input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+
+  padding: 0;
+
+  border: 0;
+  outline: none;
+
+  background: transparent;
+  color: var(--lf-text);
+
+  font-family:
+    "Figtree",
+    "Segoe UI",
+    system-ui,
+    sans-serif;
+
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.lf-login-input input:focus {
+  outline: none;
+}
+
+.lf-login-input input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.lf-login-input input::placeholder {
+  color: #8a9a9f;
+}
+
+/* =========================
+   INPUT HELP TEXT
+========================= */
+
+.lf-login-help {
+  display: block;
+
+  margin-top: 7px;
+
+  color: var(--lf-muted);
+
+  font-size: 11px;
+}
+
+/* =========================
+   SUBMIT BUTTON
+========================= */
+
+.lf-login-submit {
+  width: 100%;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 3px;
+  padding: 0 14px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: var(--lf-teal);
+  color: #fff;
+
+  font-family:
+    "Figtree",
+    "Segoe UI",
+    system-ui,
+    sans-serif;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.15s ease;
+}
+
+.lf-login-submit:hover:not(:disabled) {
+  background: var(--lf-teal-hi);
+
+  box-shadow:
+    0 8px 22px rgba(15, 107, 120, 0.18);
+}
+
+.lf-login-submit:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.lf-login-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================
+   RESEND OTP
+========================= */
+
+.lf-resend {
+  width: 100%;
+
+  margin-top: 14px;
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+  color: var(--lf-muted);
+
+  font-family:
+    "Figtree",
+    "Segoe UI",
+    system-ui,
+    sans-serif;
+
+  font-size: 12.5px;
+  line-height: 1.4;
+
+  cursor: pointer;
+}
+
+.lf-resend strong {
+  color: var(--lf-teal);
+  font-weight: 600;
+}
+
+.lf-resend:hover strong {
+  color: var(--lf-teal-hi);
+}
+
+.lf-resend:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* =========================
+   SECURITY BOX
+========================= */
+
+.lf-login-security {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  margin-top: 22px;
+  padding: 11px 12px;
+
+  border-radius: 10px;
+
+  background: #edf4f3;
+}
+
+.lf-login-security > svg {
+  flex: none;
+  color: var(--lf-teal);
+}
+
+.lf-login-security div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lf-login-security strong {
+  color: #35525a;
+
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.lf-login-security span {
+  color: var(--lf-muted);
+
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.lf-login-footer {
+  margin-top: 24px;
+  padding-top: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  border-top: 1px solid var(--lf-line);
+
+  color: var(--lf-muted);
+
+  font-size: 8.5px;
+  line-height: 1.3;
+  font-weight: 600;
+
+  letter-spacing: 0.04em;
+}
+
+/* =========================
+   BOTTOM TAGLINE
+========================= */
+
+.lf-login-bottom {
+  position: absolute;
+  z-index: 2;
+
+  left: 50%;
+  bottom: 16px;
+
+  transform: translateX(-50%);
+
+  width: max-content;
+  max-width: calc(100% - 32px);
+
+  color: rgba(190, 235, 240, 0.48);
+
+  font-size: 9px;
+  font-weight: 500;
+
+  letter-spacing: 0.06em;
+
+  text-align: center;
+}
+
+/* =========================
+   FOCUS ACCESSIBILITY
+========================= */
+
+/*
+  Buttons keep a visible keyboard focus ring.
+  Inputs do NOT get the unwanted mint rectangle.
+*/
+
+.lf-login-page button:focus-visible {
+  outline: 3px solid var(--lf-mint);
+  outline-offset: 2px;
+}
+
+.lf-login-page input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .lf-login-page {
+    padding: 18px 12px;
+  }
+
+  .lf-login-card {
+    padding: 30px 22px 24px;
+    border-radius: 18px;
+  }
+
+  .lf-login-brand {
+    margin-bottom: 24px;
+  }
+
+  .lf-login-brand-name {
+    font-size: 22px;
+  }
+
+  .lf-login-heading h1 {
+    font-size: 26px;
+  }
+
+  .lf-login-heading p {
+    font-size: 13.5px;
+  }
+
+  .lf-login-bottom {
+    display: none;
+  }
+}
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .lf-login-input,
+  .lf-login-submit,
+  .lf-login-mode button {
+    transition: none;
+  }
+}
+
+
+/* LOGIFORGE AI — Login Layout Fix */
+.lf-login-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: auto;
+  padding: 32px 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.lf-login-card {
+  width: min(100%, 460px);
+  margin: 0 auto;
+  padding: 28px 30px 24px;
+  border-radius: 20px;
+}
+
+.lf-login-brand {
+  margin-bottom: 24px;
+}
+
+.lf-login-heading p {
+  margin-bottom: 18px;
+}
+
+.lf-login-mode {
+  margin-bottom: 17px;
+}
+
+.lf-login-form {
+  gap: 14px;
+}
+
+.lf-login-security {
+  margin-top: 18px;
+}
+
+.lf-login-footer {
+  margin-top: 22px;
+  padding-top: 15px;
+}
+
+.lf-login-bottom {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  width: 100%;
+  max-width: 100%;
+  margin: 16px auto 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .lf-login-page {
+    padding: 20px 12px;
+  }
+
+  .lf-login-card {
+    padding: 24px 20px 22px;
+  }
+}
